@@ -1,0 +1,546 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Ngăn xếp </title>
+
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+		<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Khái niệm </a> </li> 
+			<li> <a href="#2"> 2. Mô tả </a> </li>
+			<ul>
+				<li> <a href="#2.1"> 2.1 Ngăn xếp dùng mảng </a> </li>
+				<li> <a href="#2.2"> 2.2 Danh sách dùng danh sách liên kết </a> </li>
+			</ul>
+			<li> <a href="#3"> 3. Chương trình minh họa </a> </li>
+			<ul>
+				<li> <a href="#3.1"> 3.1 Sử dùng mảng </a> </li>
+				<li> <a href="#3.2"> 3.2 Sử dụng danh sách liên kết </a> </li>
+			</ul>
+			<li> <a href="#4"> 4. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Ngăn xếp </h1>
+		<img class="tab5" src="./picture/Stack/realstack.png" alt="Real Stack"/>
+		<h2 id="1">1. Khái niệm </h2>
+			<p class="tab3"> &nbsp; &nbsp; Ngăn xếp là dạng đặc biệt của danh sách tuyến tính, trong đó các đối tượng được <i>nạp vào</i> (push) và <i> lấy ra </i> chỉ từ một đầu được gọi là <i>đỉnh</i> (top) của danh sách</p>
+			
+			<p class="tab3"> &nbsp; <b> - Nguyên tắc:</b> Vào sau - Ra trước (Last-in, First-out, viết tắc là LIFO)</p>
+			<p class="tab3"> &nbsp; <b> - Các phép toán cơ bản với ngăn xếp: </b></p>
+			<p class="tab3"> &nbsp;&nbsp; + push(object): bổ sung vào một phần tử, gọi tắt là </i> nạp vào</i> </p>
+			<p class="tab3"> &nbsp;&nbsp;+ pop(): loại bỏ và trả lại phần tử nạp vào sau cùng, gọi là </i> lấy ra</i> </p>
+			<img class="tab5" src="./picture/Stack/Lifo_stack.png" alt="Stack"/>
+			<p class="tab3"> &nbsp; <b> - Các phép tooán bổ trợ: </b></p>
+			<p class="tab3"> &nbsp;&nbsp; + top(): trả lại phần tử nạp vào sau cùng mà không loại nó ra khỏi ngăn xếp </p>
+			
+			<p class="tab3"> &nbsp;&nbsp; + size(): trả lại số lượng phần tử được lưu trữ </p>
+			<p class="tab3"> &nbsp;&nbsp; + boolean isEmpty(): nhận biết có phản là ngăn xếp rỗng </p>
+			<p class="tab3"> &nbsp; <b> - Ta xét hai cách tổ chức ngăn xếp: </b></p>
+			<p class="tab3"> &nbsp;&nbsp; + Sử dụng mảng </p>
+			<p class="tab3"> &nbsp;&nbsp; + Sử dụng danh sách liên kết </p>
+
+		<h2 id="2">2. Mô tả </h2>
+		
+		<h3 id="2.1"> 2.1 Ngăn xếp dùng mảng </h3> 
+		<img class="tab5" src=".\picture\Stack\array-stack.gif" alt="Stack Array"/>
+		<p class="tab3"> &nbsp; Cách đơn giản nhất để cài đặt ngăn xếp là sử dụng mảng (S). Ta nạp các phần tử theo thứ tự từ trái sang phải. Có biến lưu trữ chỉ số của phần tử ở đầu ngăn xếp (N)</p>
+<pre class="brush: cpp;">
+typedef DataType Item;
+static Item *s;
+static int N;</pre>
+		<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+		<h4 id="2.1.1"onclick="show('2.1.1hide')" style="cursor: pointer"> 2.1.1 Khởi tạo ngăn xếp </h4> 
+		<div id="2.1.1hide" style="display: none;">
+<pre class="brush: cpp;">
+void STACKinit(int maxN){
+	s = (Item *) malloc(maxN*sizeof(Item));
+	N = 0;
+}</pre>
+		</div>
+		
+		<h4 id="2.1.2" class="hide" onclick="show('2.1.2hide')" > 2.1.2 Kiểm tra ngăn xếp rỗng </h4> 
+		<div id="2.1.2hide" style="display: none;">
+<pre class="brush: cpp;">
+int STACKempty(){
+	return N==0;
+}</pre>
+		</div>
+		<h4 id="2.1.3" class="hide" onclick="show('2.1.3hide')"> 2.1.3 Thêm phần tử vào đầu ngăn xếp </h4> 
+		<div id="2.1.3hide" style="display: none;">
+<pre class="brush: cpp;">
+void STACKpush(Item item){
+	s[N++] = item;
+}</pre>
+		</div>
+		<h4 id="2.1.4" class="hide" onclick="show('2.1.4hide')"> 2.1.4 Lấy phần tử vào đầu ngăn xếp </h4> 
+		<div id="2.1.4hide" style="display: none;">
+<pre class="brush: cpp;">
+void STACKpop(){
+	return s[--N];
+}</pre>
+		</div>
+		<h3 id="2.2"> 2.2 Ngăn xếp dùng danh sách liên kết </h3> 
+		<p class="tab3"> &nbsp; Trong cách cài đặt ngăn xếp dùng danh sách liên kết, ngăn xếp được cài đặt như danh sách liên kết với các thao tác bổ xung và loại bỏ luôn làm việc với phần tử đầu tiên.</p>
+		<pre class="brush: cpp;">
+struct StackNode{
+	float item;
+	StackNode *next;
+}
+struct Stack{
+	StackNode *top;
+}
+</pre>
+		<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+		<h4 id="2.2.1" class="hide"  onclick="show('2.2.1hide')"> 2.2.1 Khởi tạo </h4>
+		<div id="2.2.1hide" style="display: none;">	
+<pre class="brush: cpp;">
+Stack *StackConstruct() {
+	Stack *s;
+	s = (Stack *)malloc(sizeof(Stack));
+	if (s == NULL)
+		return NULL; // No memory
+	s->top = NULL;
+	return s;
+}</pre>
+		</div>
+		
+		<h4 id="2.2.2" class="hide" onclick="show('2.2.2hide')"> 2.2.2 Kiểm tra ngăn xếp rỗng </h4>
+		<div id="2.2.2hide" style="display: none;">
+		<pre class="brush: cpp;" id="2.2.2hide" style="display: none;">
+int StackEmpty(const Stack *s){
+	return (s->top == NULL);
+}</pre>
+		</div>
+		
+		<h4 id="2.2.3" onclick="show('2.2.3hide')" class="hide" > 2.2.3 Kiểm tra tràn ngăn xếp </h4>
+		<div id="2.2.3hide" style="display: none;">
+<pre class="brush: cpp;">
+int StactFull(){
+	printf("\n No memory! Stack is full");
+	getch();
+	return 1;
+}
+</div>
+</pre>
+		<h4 id="2.2.4" onclick="show('2.2.4hide')" class="hide" > 2.2.4 Nạp vào (Push) </h4>
+		<div id="2.2.4hide" style="display: none;">
+		<p class="tab4"> Cần thực hiện các thao tác sau: </p>
+		<p class="tab5"> 1. Tạo nút mới cho item </p>
+		<p class="tab5"> 2. Móc nối nút mới đến nút ở đầu </p>
+		<p class="tab5"> 3. Đặt nút mới thành nút dâu mới </p>
+<pre class="brush: cpp;">
+int StackPush(Stack *s, float item){
+	StackNode *node;
+	node = (StackNode *)malloc(sizeof(StackNode)); //(1)
+	if (node == NULL){
+		StackFull() ; 
+		return 1; // Train Stack: hết bộ nhớ
+	}
+	node->item = item; 		//(1)
+	node->next = s->top; 	//(2)
+	s->top = node; 			//(3)
+	return 0;
+}</pre>
+		</div>
+		
+		<h4 id="2.2.5" onclick="show('2.2.5hide')" class="hide" > 2.2.5 Lấy ra (Pop) </h4>
+		<div id="2.2.5hide" style="display: none;">
+		<p class="tab4"> Thuật toán:
+		<p class="tab5"> 1. kiểm tra có phải ngăn xếp là rỗng </p>
+		<p class="tab5"> 2. ghi nhớ địa chỉ của nút đầu hiện tại</p>
+		<p class="tab5"> 3. ghi nhớ giá trị phần từ ở nút đầu</p>
+		<p class="tab5"> 4. chuyển nút tiếp theo thành nút đầu mới (new top)</p>
+		<p class="tab5"> 5. giải phóng nút đầu cũ</p>
+		<p class="tab5"> 6. trả lại giá trị phần từ ở nút đầu cũ</p>
+<pre class="brush: cpp;">
+float StackPop(Stack *s){
+	float item;
+	StackNode *node;
+	if (StackEmpty(s)){  	//(l)
+		EmptyStack(); //can't pop
+		return NULL;
+	}
+	node = s->top; 			//(2)
+	item = node->item;  	//(3)
+	s->top = node->next;	//(4)
+	free(node): 			//(5)
+	return item; 			//(6)
+}
+</pre>
+		</div>
+		<h4 id="2.2.6"onclick="show('2.2.6hide')" class="hide" > 2.2.6 Đưa ra các phần tử của ngăn xếp </h4>
+		<div id="2.2.6hide" style="display: none;">
+<pre class="brush: cpp;">
+void disp(Stack* s){
+	StackNode* node;
+	int ct = 0; float m;
+	printf("\n\n DANE SACK CAC PEAR TU CUA STACK \n\n");
+	if (StackEmpty(s)){
+		printf("\n\n >>>>> EMPTY STACK <<<<<\n");
+		getch();
+	}
+	else{
+		node= s->top;
+		do{
+			m=node->item; printf("%8.3f ", m); ct++;
+			if (ct % 9 == 0) printf("\n");
+			node = node->next;
+		}while (!(node == NULL));
+		printf("\n");
+	}
+}</pre>
+		</div>
+		<h4 id="2.2.7" onclick="show('2.2.7hide')" class="hide" > 2.2.7 Hủy ngăn xếp </h4>
+		<div id="2.2.7hide" style="display: none;">
+		<pre class="brush: cpp;">
+void StackDestroy(Stack *s) {
+	while (!StackEmpty(s)){ 
+		StackPop(s);
+	}
+	free(s);
+}</pre>
+		</div>
+	<h3 id="3"> 3. Chương trình minh họa </h3>
+	<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+	<h4 id="3.1"  class="hide"onclick="show('stack1')"> 3.1 Sử dụng mảng </h4>
+<div id="stack1" style="display: none;">
+<pre class="brush: cpp;">		
+#include <stdlib.h>
+#include <stdio.h>
+ 
+#define Max 100 //so phan tu toi da cua Stack
+typedef int item; //kieu du lieu cua Stack
+struct Stack
+{
+    int Top; //Dinh Top
+    item Data[Max]; //Mang cac phan tu
+};
+ 
+void Init (Stack &S); //khoi tao Stack rong
+int Isempty(Stack S); //kiem tra Stack rong
+int Isfull(Stack S); //kiem tra Stack day
+void Push(Stack &S, item x); //them phan tu vao Stack
+int Peak(Stack S); //Lay phan tu o dau Stack nhung khong xoa
+int Pop(Stack &S); //Loai bo phan tu khoi Stack
+void Input (Stack &S); //Nhap Stack
+void Output(Stack S); //Xuat Stack
+ 
+void Init (Stack &S) //khoi tao Stack rong
+{
+    S.Top = 0; //Stack rong khi Top la 0
+}
+ 
+int Isempty(Stack S) //kiem tra Stack rong
+{
+    return (S.Top == 0);
+}
+ 
+int Isfull(Stack S) //kiem tra Stack day
+{
+    return (S.Top == Max); //
+}
+ 
+void Push(Stack &S, item x) //them phan tu vao Stack
+{
+    if (!Isfull(S))
+    {
+        S.Data[S.Top] = x; //Gan du lieu
+        S.Top ++; //Tang Top len 1
+    }
+}
+ 
+int Peak(Stack S) //Lay phan tu o dau Stack nhung khong xoa
+{
+    return S.Data[S.Top-1]; //Lay du lieu tai Top
+}
+ 
+int Pop(Stack &S) //Loai bo phan tu khoi Stack
+{
+    if (!Isempty(S))
+    {
+        S.Top --; //Giam Top
+        return S.Data[S.Top]; //Lay du lieu tai Top
+    }
+}
+ 
+void Input (Stack &S)
+{
+    int n;
+    item x;
+    do
+    {
+        printf("Nhap so phan tu cua Stack (%d) :",Max);
+        scanf("%d",&n);
+    } while (n>Max || n<1);
+    for (int i=0; i<n; i++)
+    {
+        printf("Nhap phan tu thu %d : ", i+1);
+        scanf("%d",&x);
+        Push(S,x);
+    }
+}
+ 
+void Output(Stack S)
+{
+    for (int i=S.Top-1; i>=0; i--)
+        printf("%d   ",S.Data[i]);
+    printf("\n");
+}
+ 
+int main()
+{
+    Stack S;
+    Init(S);
+    Input(S);
+    Output(S);
+ 
+    int lua_chon;
+    printf("Moi ban chon phep toan voi DS LKD:");
+    printf("\n1: Kiem tra Stack rong");
+    printf("\n2: Kiem tra Stack day");
+    printf("\n3: Them phan tu vao Stack");
+    printf("\n4: Xoa phan tu trong Stack");
+    printf("\n5: Xuat Stack");
+    printf("\n6: Thoat");
+    do
+    {
+        printf("\nBan chon: ");
+        scanf("%d",&lua_chon);
+        switch (lua_chon)
+        {
+            case 1:
+            {
+                if (Isempty(S)) printf("Stack rong !");
+                else printf ("Stack khong rong !");
+                break;
+            }
+            case 2:
+            {
+                if (Isfull(S)) printf("Stack day !");
+                else printf ("Stack chua day !");
+                break;
+            }
+            case 3:
+            {
+                item x;
+                printf ("Nhap phan tu can chen vao DS: ");
+                scanf("%d",&x);
+                Push(S,x);
+                break;
+            }
+            case 4:
+            {
+                Pop(S);
+                break;
+            }
+            case 5: 
+            {
+                Output(S);
+                break;
+            }
+            case 6: break;
+        }
+    }while (lua_chon !=6);
+    return 0;
+}
+</pre>
+</div>
+		<h4 id="3.2"  class="hide" onclick="show('stack2')"> 3.2 Sử dụng danh sách liên kết </h4>
+<div id="stack2" style="display: none;">
+<pre class="brush: cpp;">
+#include <stdlib.h>
+#include <stdio.h>
+ 
+typedef int item; //kieu du lieu
+struct Node
+{
+    item Data; //du lieu
+    Node *Next; //link
+};
+typedef struct Stack
+{
+    Node *Top;
+};
+ 
+void Init (Stack &S); //khoi tao Stack rong
+int Isempty(Stack S); //kiem tra Stack rong
+int Len (Stack S); //Do dai Stack
+void Push(Stack &S, item x); //them phan tu vao Stack
+int Peak(Stack S); //Lay phan tu o dau Stack nhung khong xoa
+int Pop(Stack &S); //Loai bo phan tu khoi Stack
+void Input (Stack &S); //Nhap Stack
+void Output(Stack S); //Xuat Stack
+Node *MakeNode(item x); //Tao 1 Node
+ 
+void Init (Stack &S) //khoi tao Stack rong
+{
+    S.Top = NULL;
+}
+ 
+int Isempty(Stack S) //kiem tra Stack rong
+{
+    return (S.Top == NULL);
+}
+ 
+int Len (Stack S)
+{
+    Node *P = S.Top;
+    int i=0;
+    while (P != NULL) //trong khi chua het Stack thi van duyet
+    {
+        i++;
+        P = P->Next;
+    }
+    return i;
+}
+ 
+Node *MakeNode(item x) //tao 1 Node
+{
+    Node *P = (Node*) malloc(sizeof(Node));
+    P->Next = NULL;
+    P->Data = x;
+    return P;
+}
+ 
+void Push(Stack &S, item x) //them phan tu vao Stack
+{
+    Node *P = MakeNode(x);
+    P->Next = S.Top;
+    S.Top = P;
+}
+ 
+int Peak(Stack S) //Lay phan tu o dau Stack nhung khong xoa
+{
+    return S.Top->Data;
+}
+ 
+int Pop(Stack &S) //Loai bo phan tu khoi Stack
+{
+    if (!Isempty(S))
+    {
+        item x = S.Top->Data; //luu lai gia tri
+        S.Top = S.Top->Next; //Xoa phan tu Top
+        return x;
+    }
+}
+void Input (Stack &S) //nhap danh sach
+{
+    int i=0; 
+    item x;
+    do
+    {
+        i++;
+        printf ("Nhap phan tu thu %d : ",i);
+        scanf("%d",&x);
+        if (x != 0) Push(S,x);
+    } while(x != 0); //nhap 0 de ket thuc
+}
+ 
+void Output(Stack S)
+{
+    Node *P = S.Top;
+    while (P != NULL)
+    {
+        printf("%d   ",P->Data);
+        P = P->Next;
+    }
+    printf("\n");
+}
+int main()
+{
+    Stack S;
+    Init(S);
+    Input(S);
+    Output(S);
+ 
+    int lua_chon;
+    printf("Moi ban chon phep toan voi DS LKD:");
+    printf("\n1: Kiem tra Stack rong");
+    printf("\n2: Do dai Stack");
+    printf("\n3: Them phan tu vao Stack");
+    printf("\n4: Xoa phan tu trong Stack");
+    printf("\n5: Xuat Stack");
+    printf("\n6: Thoat");
+    do
+    {
+        printf("\nBan chon: ");
+        scanf("%d",&lua_chon);
+        switch (lua_chon)
+        {
+            case 1:
+            {
+                if (Isempty(S)) printf("Stack rong !");
+                else printf ("Stack khong rong !");
+                break;
+            }
+            case 2:
+            {
+                printf("Do dai Stack: %d",Len(S));
+                break;
+            }
+            case 3:
+            {
+                item x;
+                printf ("Nhap phan tu can chen vao DS: ");
+                scanf("%d",&x);
+                Push(S,x);
+                break;
+            }
+            case 4:
+            {
+                Pop(S);
+                break;
+            }
+            case 5: 
+            {
+                Output(S);
+                break;
+            }
+            case 6: break;
+        }
+    }while (lua_chon !=6);
+    return 0;
+}</pre>
+</div>		
+
+
+
+
+
+
+
+
+
+	<h2 id = "4"> 4. Bài tập tự làm </h2>
+	</main>
+</body>
+
+
+</html>

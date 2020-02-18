@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Các khái niệm cơ bản </title>
+
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+		table {	
+			width: 75%;
+			border-collapse: collapse;
+			//background-color: #eee;
+		}
+
+		tr {
+			border-bottom: 1px solid #d9d9d9;
+		}
+		td, th{
+			text-align: left;
+			padding : 0px 10px;
+		}
+		th{
+			font-weight: normal;
+			color: #279;
+		}
+		tr:nth-child(even) {background-color: #f2f2f2}
+	</style>
+	<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Ví dụ mở đầu </a> </li> 
+			<ul>
+				<li> <a href="#1.1"> 1.1 Thuật toán trực tiếp </a> </li>
+				<li> <a href="#1.2"> 1.2 Thuật toán nhanh hơn </a> </li>
+				<li> <a href="#1.3"> 1.3 Thuật toán đệ quy </a> </li>
+				<li> <a href="#1.4"> 1.4 Thuật toán quy hoạch động </a> </li>
+			</ul>
+			<li> <a href="#2"> 2. Độ phức tạp của thuật toán  </a> </li>
+			<ul>
+				<li> <a href="#2.1"> 2.1 Khái niệm bài toán và thuật toán </a> </li>
+				<li> <a href="#2.2"> 2.2 Độ phức tạp của thuật toán </a> </li>
+				<li> <a href="#2.3"> 2.3 Các loại thời gian tính </a> </li>
+			</ul>
+			<li> <a href="#3"> 3. Kí hiệu tiệm cận </a> </li>
+			<ul>
+				<li> <a href="#3.1"> 3.1 Sử dùng mảng </a> </li>
+				<li> <a href="#3.2"> 3.2 Sử dụng danh sách liên kết </a> </li>
+			</ul>
+			<li> <a href="#4"> 4. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Các khái niệm cơ bản </h1>
+		<h2 id="1">1. Ví dụ mở đầu </h2>
+			<p class="tab3"> Bài toán tìm dãy con lớn nhất. Cho dãy số: </p>
+			<p class="tab7"> a<sub>1</sub>, a<sub>2</sub>, ... , a<sub>n</sub> </p>
+			<p class="tab3"> Dãy số: a<sub>i</sub>, a<sub>i+1</sub>, ..., a<sub>j</sub> với 1 &le; i &le; j &le; n được gọi là dãy con của dãy đã cho và tổng của dãy con đó được gọi là <b>trọng lượng</b> của dãy con này. </p>
+			<p class="tab3"> &nbsp; <b> Ví dụ:</b> Hãy tìm trọng lượng lớn nhất của dãy con -2, 11, -4, 13, -5, -2 </p>
+			<p class="tab3"> &nbsp; Câu trả lời cần đưa ra là dãy con 11, -3, 13</p>
+			
+			<h3 id ="1.1" > 1.1 Thuật toán trực tiếp </h3>
+			<p class="tab3"> Thuật toán đơn giản đầu tiên có thể nghĩ ra để giải bài toán đặt ra là: duyệt tất cả các dãy con có thể. </p>
+			<p class="tab7">  a<sub>i</sub>, a<sub>i+1</sub>, ..., a<sub>j</sub> với 1 &le; i &le; j &le; n</p>
+			<p class="tab3"> và tìm tổng của mỗi dãy con để tìm ra trọng lượng lớn nhất. </p>
+			<img class = "tab5" src = "./picture/khainiemcoban/normalargorythm.gif" alt = "Thuật toán trực tiếp"/>
+			<p class="tab3"> Thuật toán này có thể cài đặt trong đoạn chương trình sau: </p>
+<pre class="brush: cpp;">
+int maxSum = 0;
+for (int i = 0; i < n; i++)
+{
+    for (int j = i; j < n; j++){
+		int sum = 0;
+		for (int k = i; k <= j; k++)
+			sum += a[k];
+		if (sum > maxSum)
+			maxSum = sum;
+	}
+};</pre>
+		<!-- Phân tích thuật toán ở đây -->
+			<h3 id ="1.2" > 1.2 Thuật toán nhanh hơn </h3>
+			<p class="tab3"> Để ý rằng tổng các số hạng từ i đến j có thể thu được từ tổng của cá số hạng từ i đến j-1. Ta có thể giảm được một vòng for trong cùng. </p>
+			<p class="tab3"> Ta có thể cài đặt như sau: </p>
+<pre class="brush: cpp;">
+int maxSum = a[0];
+for (int i = 0; i < n; i++)
+{
+	int sum = 0;
+    for (int j = i; j < n; j++){
+		sum += a[j];
+		if (sum > maxSum)
+			maxSum = sum;
+	}
+};</pre>
+		<!-- Phân tích thuật toán ở đây -->
+			<h3 id ="1.3" > 1.3 Thuật toán đệ quy </h3>
+			<h3 id ="1.4" > 1.4 Thuật toán quy hoạch động </h3>
+<pre class="brush: cpp;">
+int smax = a[0]; 		//Trọng lượng của dãy con lớn nhất
+int maxendhere = a[0];
+int imax = 1; 			//Vị trí kết thúc của dãy con lớn nhất
+int u, v;
+for (int i = 1; i < n; i++){
+	u = maxendhere + a[i];
+	v = a[i];
+	if (u > v) 
+		maxendhere = u;
+	else
+		maxendhere = v;
+	if (maxendhere > smax){
+		smax = maxendhere;
+		imax = i;
+	}
+}</pre>
+		<p class="tab4"> So sánh các thuật toán </p>
+			<table class="tab3">
+				<tr>
+					<th> Số phép toán </th>
+					<th> n = 10 </th>
+					<th> Thời gian </th> 
+					<th> n = 100 </th>
+					<th> Thời gian </th>
+				</tr>
+				<tr>
+					<td> log(<i>n</i>) </td>
+					<td> 3.32 </td>
+					<td> 3.3 * 10<sup>-8</sup> giây </td> 
+					<td> 6.64 </td>
+					<td> 6 * 10<sup>-8</sup> giây </td>
+				</tr>
+				<tr>
+					<td> <i>n</i>log(<i>n</i>) </td>
+					<td> 33.2 </td>
+					<td> 3.3 * 10<sup>-7</sup> giây </td> 
+					<td> 664 </td>
+					<td> 6.6 * 10<sup>-6</sup> giây </td>
+				</tr>
+				<tr>
+					<td> n<sup>2</sup> </td>
+					<td> 100 </td>
+					<td> 10<sup>-6</sup> giây</td> 
+					<td> 10000 </td>
+					<td> 10<sup>-4</sup></td>
+				</tr>
+				<tr>
+					<td> n<sup>3</sup> </td>
+					<td> 1 * 10<sup>3</sup> </td>
+					<td> 10<sup>-5</sup> giây</td> 
+					<td> 1 * 10<sup>6</sup> </td>
+					<td> 10<sup>-2</sup></td>
+				</tr>
+				<tr>
+					<td> e<sup>n</sup> </td>
+					<td> 2.2 * 10<sup>4</sup> </td>
+					<td> 2 * 10<sup>-4</sup> giây</td> 
+					<td> 2.69 * 10<sup>43</sup> </td>
+					<td> >10<sup>26</sup> thế kỉ</td>
+				</tr>
+			</table>
+			<br/>
+			<table class="tab3">
+				<tr>
+					<th> Số phép toán </th>
+					<th> n = 10000 </th>
+					<th> Thời gian </th> 
+					<th> n = 10<sup>6</sup> </th>
+					<th> Thời gian </th>
+				</tr>
+				<tr>
+					<td> log(<i>n</i>) </td>
+					<td> 13.3 </td>
+					<td> 10<sup>-6</sup> giây </td> 
+					<td> 19.9 </td>
+					<td> <10<sup>-5</sup> giây </td>
+				</tr>
+				<tr>
+					<td> <i>n</i>log(<i>n</i>) </td>
+					<td> 13.3 * 10<sup>5</sup> </td>
+					<td> 10<sup>-3</sup> giây </td> 
+					<td> 19.9 * 10<sup>7</sup> </td>
+					<td> 2 * 10<sup>-1</sup> giây </td>
+				</tr>
+				<tr>
+					<td> n<sup>2</sup> </td>
+					<td> 1 * 10<sup>8</sup> </td>
+					<td> 1 giây</td> 
+					<td> 1 * 10<sup>12</sup> </td>
+					<td> 2.77 giờ</td>
+				</tr>
+				<tr>
+					<td> n<sup>3</sup> </td>
+					<td> 1 * 10<sup>12</sup> </td>
+					<td> 2.7 giờ</td> 
+					<td> 1 * 10<sup>15</sup> </td>
+					<td> 115 ngày </td>
+				</tr>
+				<tr>
+					<td> e<sup>n</sup> </td>
+					<td> 8.81 * 10<sup>4342</sup> </td>
+					<td> >10<sup>4327</sup> thế kỉ</td> 
+					<td> </td>
+					<td> </td>
+				</tr>
+				
+			</table>-->
+			
+			 
+
+		<h2 id="2">2. Độ phức tạp của thuật toán </h2>
+		<h3 id="2.1"> 2.1 Khái niệm bài toán và thuật toán </h3> 
+		<p class="tab3"> <b>Định nghĩa: </b> <i>Bài toán tính toán F</i> là ánh xạ từ tập các xâu nhị phân độ dài hữu hạn vào tập các xâu nhị phân có độ dài hữu hạn:</p>
+		<p class="tab7"> F: {0, 1}* -> {0, 1}* </p>
+		<p class="tab3"> <b> Ví dụ: </b></p>
+		<p class="tab3"> - Mỗi số nguyên x đề có thể biểu diễn dưới dạng xâu nhị phân là các viết trong hệ đếm nhị phân của nó. </p>
+		<p class="tab3"> - Hệ phương trình tuyến tính Ax = B có thể biểu diễn dưới dạnh xâu là ghép nối của các xâu biểu diễn nhị phân của các thành phần của ma trận A và vector b</p>
+		<p class="tab3"> - Đa thức một biến P(x) = a<sub>0</sub> + a<sub>1</sub>x + ... + a<sub>n</sub>x<sup>n</sup> hoàn toàn có thể xác định bởi dãy số n, a<sub>0</sub>, a<sub>1</sub>, a<sub>n</sub>, mà để biểu diễn dãy số này chúng ta có thể sử dụng xâu nhị phân.</p>
+		<p class="tab3"> <b>Định nghĩa: </b><i> Ta hiểu thuật toán giải bài toán đặt ra là một thủ tục xác định bao gồm một dãy hữu hạn các bước cần thực hiện để <b>thu được dầu ra</b> cho </b> cho một đầu vào cho trước</b> của bài toán.</i></p>
+		<p class="tab3"> Thuật toán có đặc trưng sau đây:</p>
+		<p class="tab3"> <b>- Đầu vào (Input):</b> Thuật toán nhận dữ liệu vào từ một tập nào đó.</p>
+		<p class="tab3"> <b>- Đầu ra (Output):</b> Với mỗi một tập các dữ liệu đầu vào, thuật toán đưa ra các dữ liệu tương ứng với lời giải bài toán.</p>
+		<p class="tab3"> <b>- Chính xác (Precision):</b> Các bước của thuật toán được mô tả chính xác.</p>
+		<p class="tab3"> <b>- Hữu hạn (Finiteness):</b> Thuật toán cần phải đưa được đầu ra sau một số hữu hạn (có thể rất lớn) bước với mọi đầu vào.</p>
+		<p class="tab3"> <b>- Đơn trị (Uniqueness):</b> Các kết quả trung gian của từng bước thực hiện thuật toán được xác định một các đươn trị và chỉ phụ thuộc vào dầu vào cũng như các kết quả cho trước.</p>
+		<p class="tab3"> <b>- Tổng quát (Generality):</b> Thuật toán có thể áp dụng để giải mọi bài toán có dạng đã cho.</p>
+		<h3 id="2.2"> 2.2 Độ phức tạp của thuật toán </h3> 
+		<p class="tab3"> &nbsp;&nbsp;<i> Đánh giá độ phức tạp của thuật toán là đánh giá lượng tài nguyên các loại mà thuật toán đòi hỏi sử dụng.</i> Có hai loại tài nguyên quan trọng là thời gian và bộ nhớ. Trong giáo trình này ta đặc biệt quan tâm đến việc đánh giá thời gian cần thiết để thực hiện một thuật toán mà sẽ gọi là <i>thời gian tính</i> của thuật toán.</p>
+		<p class="tab3"> Rõ ràng thời gian tính phụ thuộc vào dữ liệu đầu vào.</p>
+		<p class="tab3"> <b> Định nghĩa: </b> <i>Ta gọi kích thước dữ liệu đầu vào (hay độ dài dữ liệu đầu vào) là số bit cần thiết để biểu diễn nó </i> </p>
+		<p class="tab3"> Ta sẽ tìm cách đánh giá thời gian tính của thuật toán bởi một <i>hàm của độ dài của dữ liệu vào</i></p>
+		<p class="tab3"> <b>Phép toán cơ bản:</b> Đo thời gian bằng đơn vị đo nào?</p>
+		<p class="tab3"> <b>Định nghĩa:</b><i> Ta gọi phép toán cơ bản là phép toán có thể thực hiện với thời gian bị chặn bởi một hằng số không phụ thuộc vào kích thước dữ liệu.</i></p>
+		<p class="tab3"> Để tính toán thời gian tính của thuật toán để ta đếm <i>số phép toán cơ bản</i> mà nó phải thực hiện</p>
+		<h3 id="2.3"> 2.3 Các loại thời gian tính </h3> 
+		<p class="tab3"> Chúng ta sẽ quan tâm đến: </p>
+		<p class="tab3"> - Thời gian tối thiểu cần thiết để thực hiện thuật toán với mọi bộ dữ liệu đầu vào kích thước n. Thời gian như vậy sẽ được gọi là <b><i>thời gian tính tốt nhất</i></b> của thuật toán với đầu vào kích thước n.</p>
+		<p class="tab3"> - Thời gian nhiều nhất cần thiết để thực hiện thuật toán với mọi bộ dữ liệu đầu vào kích thước n. Thời gian như vậy sẽ được gọi là <b><i>thời gian tính tồi nhất</i></b> của thuật toán với đầu vào kích thước n.</p>
+		<p class="tab3"> - Thời gian trung bình cần thiết để thực hiện thuật toán trên tập hữu hạn các đầu vào kích thước n. Thời gian như vậy sẽ được gọi là <b><i>thời gian tính trung bình</i></b> của thuật toán với đầu vào kích thước n.</p>
+		<p class="tab3"> <i></i> </p>
+		<p class="tab3"> <i></i> </p>
+
+
+
+	<h2 id = "4"> 4. Bài tập tự làm </h2>
+	</main>
+</body>
+
+
+</html>

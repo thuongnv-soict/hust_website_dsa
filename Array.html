@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Mảng </title>
+	<style>
+		
+	</style>
+	<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1">1. Nội dung</a>
+			<ul>
+				<li> <a href="#1.1"> 1.1 Khái niệm </a> </li>
+				<li> <a href="#1.2"> 1.2 Mô tả </a> </li>
+				<ul>
+					<li> <a href="#1.2.1"> 1.2.1 Mảng một chiều </a> </li> 
+					<li> <a href="#1.2.2"> 1.2.2 Mảng hai chiều </a> </li>
+				</ul>
+				<li> <a href="#1.3"> 1.3 Code </a> </li>
+			</ul>
+			<li> <a href="#2">2. Bài tập mẫu</a>
+			<li> <a href="#3">3. Bài tập tự làm</a>
+			<li> <a href="#4">4. Ưu/khuyết điểm của mảng</a>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Mảng </h1>
+		<img src="./picture/array/split-array.gif" alt="Real Array"/>
+		<h2 id="1">1. Nội dung</h2>
+		<h3 id="1.1">1.1 Khái niệm </h3>
+		<p class="tab3">Số phần tử cố định</p>
+		<p class="tab3">Kích thước một phần tử cố định</p>
+		<p class="tab3">Các phần tử mảng phải cùng kiểu</p>
+		<p class="tab3">Truy cập ngẫu nhiên (theo chỉ số)</p>
+		<h3 id="1.2"> 1.2 Mô tả </h3>
+		<p id="1.2.1" class="tab3"><b>1.2.1 Mảng một chiều</b> </p>
+		<img class="tab4" src=".\picture\array\mang1chieu.png" alt="Mảng một chiều" width="500px" height="auto"/>
+		<p id="1.2.2" class="tab3"><b>1.2.2 Mảng hai chiều</b> </p>
+		<img class="tab4" src=".\picture\array\mang2chieu.png" alt="Mảng hai chiều" width="250px" height="auto"/>
+		<h3 id="1.3">&nbsp; 1.3 Code </h3>
+
+			<pre class="brush: cpp;">
+int a [1000]; 
+int b [100][100];
+typedef struct MyStruct{
+	int value ; 
+	MyStruct* ptr; 
+};
+MyStruct x [10]; 
+			</pre>
+		
+		
+		<h2 id="2">2. Bài tập mẫu</h2>
+		<p class="tab2"> <b>Bài 1:</b> Nhập vào một mảng các số tự nhiên (có tối đa 99 phần tử), sau đó hiển thị mảng vừa nhập ra màn hình (các phần tử cách nhau bởi một khoảng trắng). Quá trình nhập sẽ dừng khi nhập vào giá trị -1. </p>
+			<pre class="brush: cpp;">
+#include <stdio.h>
+#include <conio.h>
+int main()
+{
+    int a[99], n = 0, i;                            //khai báo
+    do{                                             //nhập mảng
+        printf("Nhap phan tu thu %d: ", n + 1);
+        scanf("%d", &a[n]);                         //lưu trực tiếp giá trị nhập vào a[n]
+        if (a[n] != -1) n++;                        //nếu giá trị hợp lệ thì dung nạp vào mảng
+    } while (a[n] != -1);
+    printf("Mang vua nhap la: ");                   //hiển thị mảng
+    for (i = 0; i < n; i++) printf("%d ", a[i]);
+    getch();                                        //dừng màn hình để xem kết quả
+}</pre>
+
+		<div class="command tab3">
+		<pre>
+Nhập phần tử thứ 1: 1 
+Nhập phần tử thứ 2: 4
+Nhập phần tử thứ 3: 2
+Nhập phần tử thứ 4: -1
+Mảng vừa nhập là:  1 4 2 </pre>
+		</div>
+		
+		<p class="tab2"> <b>Bài 2:</b> Nhập vào một mảng gồm n (n≤ 99) số tự nhiên từ bàn phím (quá trình nhập sẽ dừng khi người sử dụng nhập vào giá trị -1) sau đó hiển thị mảng vừa nhập và giá trị nhỏ nhất của mảng ra màn hình. </p>
+			<pre class="brush: cpp;">
+#include <stdio.h>
+#include <conio.h>
+int main()
+{
+    int a[99], n = 0, i, min;                          //b1. Khai báo
+    do{                                                //b2. Nhập mảng
+        printf("Nhap phan tu thu %d: ", n + 1);
+        scanf("%d", &a[n]);
+        if (a[n] != -1) n++;
+    } while (a[n] != -1);
+    printf("Mang vua nhap la: ");                            
+    min = a[0];                                        //b3. Tìm min & hiển thị mảng                                       
+    for (i = 0; i < n; i++) 
+    {
+        printf("%d ", a[i]);                                 
+        if (a[i] < min) min = a[i];                           
+    }
+    printf("\nGia tri nho nhat cua mang la: %d", min); //b4. Xuất kết quả & dừng màn hình
+    getch();
+}</pre>
+
+		<div class="command tab3">
+		<pre>
+Nhập phần tử thứ 1: 6 
+Nhập phần tử thứ 2: 5
+Nhập phần tử thứ 3: 4
+Nhập phần tử thứ 4: 8
+Nhập phần tử thứ 4: -1
+Mảng vừa nhập là: 6 5 4 8
+Giá trị nhỏ nhất của mảng là: 4 </pre>
+		</div>
+		
+		<h2 id="3"> 3. Bài tập tự làm </h2>
+		<p class="tab2"> <b>Bài 1:</b> Khởi tạo một mảng gồm n (n≤ 99) số tự nhiên sau đó tính giá trị trung bình các phần tử của mảng. </p>
+		<p class="tab2"> <b>Bài 2:</b> Khởi tạo một mảng gồm n (n ≤ 99) số thực, nhập một số thực x từ bàn phím sau đó đếm số phần tử trong mảng có giá trị x.</p>
+		
+		<h2 id="4"> 4. Ưu/khuyết điểm của mảng </h2>
+		<p class="tab2"> Cách biểu diễn này rất tiện cho việc truy xuất đến các phần tử của danh sách.
+		<p class="tab2"> Do danh sách là biến động, số phần tử trong danh sách là không biết trước. Nên ta thường phải khai báo kích thước tối đa cho mảng để dự phòng (maxlength). Điều này dẫn đến lãng phí bộ nhớ. </p>
+		<p class="tab2"> Các thao tác chèn một phần tử vào danh sách và xoá bỏ một phần tử khỏi danh sách được thực hiện chậm (với thời gian tuyến tính đối với kích thước danh sách) </p>
+		
+
+	
+	</main>
+</body>
+
+
+</html>

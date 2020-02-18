@@ -1,0 +1,83 @@
+﻿
+		/*Xám: #eee
+		
+		
+		*/
+		.path{
+			font-size: 80%; 
+			width: 100%; 
+			height: 20px;
+			margin: 5px 0 5px 10px;
+			color: #279;
+		}
+		.path a{
+			text-decoration: none;
+		}
+		.path a:visited{
+			color: #279;
+		}
+		.path a:link{
+			color: #279;
+		}
+		
+		body{
+			font-family: "Segoe UI", Calibri;
+			margin: auto;
+			min-width: 1000px;
+		}
+		main{
+			//width:100%;
+			height: 580px;
+			//border-bottom: 1px solid #ff6600;
+		}
+		nav{
+			float: left;
+			width: 17%;
+			//width: 150px;
+			height: 100%;
+		}
+		nav a{
+			text-decoration: none;
+			padding-left: 20px;
+			padding-top: 7px;
+			padding-bottom :7px;
+			color: #ff6600;
+			border-bottom: 1px solid #f2f2f2;
+			//border-right: 2px solid #B34700;
+			display: block; 
+		}
+		nav a:hover{
+			border: 1px solid #ff944d;
+		}
+		.active{
+			background-color: #ffa366;
+			color: white;
+		
+		}
+		.non-active{
+			background-color: white;
+			color: #ff6600;
+		}
+		nav a:first-child{
+			padding: 10px 0 10px 10px;
+			background-color: #ff6600;
+			color: white;
+			border: none;
+			//color: #ff6600;
+			//font-weight: bold;
+			font-size: 120%;
+		}
+		nav a:first-child:hover{
+			border: none;
+		}
+		section{
+			float: left;
+			width: 83%;
+		}
+		iframe{
+			//width: 1105px;
+			width: 100%;
+			height: 580px;
+			border: none;
+		}
+		/*                        FOOTER                  */

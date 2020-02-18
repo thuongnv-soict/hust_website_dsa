@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Tìm kiếm </title>
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+			max-height: 300px;
+		}
+		h1 + img{
+			margin-left: 100px;
+			height: 300px;
+			width: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+	<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Tìm kiếm tuần tự và tìm kiếm nhị phân </a> </li> 
+			<ul>
+				<li> <a href="#1.1"> 1.1 Tìm kiếm tuần tự </a> </li>
+				<li> <a href="#1.2"> 1.2 Tìm kiếm nhị phân </a> </li>
+			</ul>		
+			<li> <a href="#2"> 2. Cây nhị phân tìm kiếm </a> </li>
+			<ul>
+				<li> <a href="#2.1"> 2.1 Định nghĩa </a> </li>
+				<li> <a href="#2.2"> 2.2 Một số thao tác trên cây nhị phân tìm kiếm </a> </li>
+			</ul>
+			<li> <a href="#3"> 3. Cây nhị phân tìm kiếm cân bằng</a> </li>
+			<ul>
+				<li> <a href="#3.1"> 3.1 Định nghĩa  </a> </li>
+				<li> <a href="#3.2"> 3.2 Các thao tác với cây AVL </a> </li>
+			</ul>
+			<li> <a href="#4"> 4. Tìm kiếm xâu mẫu </a> </li>
+			<ul>
+				<li> <a href="#4.1"> 4.1 Thuật toán trực tiếp  </a> </li>
+				<li> <a href="#4.2"> 4.2 Thuật toán Boyer-Moore </a> </li>
+				<li> <a href="#4.3"> 4.3 Thuật toán Rabin-Karp </a> </li>
+			</ul>
+			<li> <a href="#5"> 5. Bảng băm </a> </li>
+			<ul>
+				<li> <a href="#5.1"> 5.1 Đặt vấn đề  </a> </li>
+				<li> <a href="#5.2"> 5.2 Địa chỉ trực tiếp </a> </li>
+				<li> <a href="#5.3"> 5.2 Hàm băm </a> </li>
+			</ul>
+			<li> <a href="#5"> 6. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Tìm kiếm </h1>
+		<h2 id="1"> 1. Tìm kiếm tuần tự và tìm kiếm nhị phân </h2>
+		<h3 id="1.1"> 1.1 Tìm kiếm tuần tự </h3>
+		<p class="tab3"> Thuật toán tìm kiếm tuần tự được thực hiện từ ý tưởng trực tiếp sau đây: Bắt đầu từ phần tử đầu tiên, duyệt qua từng phần tử cho đến khi tìm được đích hoặc kiết luận không tìm được.</p>
+		<img class="tab5" src="./picture/search/LinearSearch-stdio.png" alt = "LinearSearch"/>
+		<p class="tab3"> Lưu ý: </p>
+		<p class="tab4"> - Không đòi hỏi các số được sắp thứ tự </p>
+		<p class="tab4"> - Làm việc được với cả danh sách liên kết (Linked List) </p>
+		<p class="tab3"> Thuật toán có độ phức tạp: <b>O(n)</b> </p>
+<pre class="brush: cpp;" >
+bool LinearSearch(int arr[], int numberOfElements, int key, int& position){
+	int index;
+	for (index = 0; index < numberOfElements; ++index){
+		if(arr[index] == key){
+			break;
+		}
+	}
+	if(index < numberOfElements){
+		position = index;
+		return true;
+	}		
+	return false;
+}</pre>
+
+
+		<h3 id="1.2"> 1.2 Tìm kiếm nhị phân </h3>
+		<p class="tab3"> Điều kiện để thực hiện thuật toán tìm kiếm nhị phân là danh sách phải <b>được sắp xếp theo thứ tự không giảm</b>.</p>
+		<p class="tab3"> <b>Các bước thực hiện: </b> </p>
+		<p class="tab4"> Bước 1: left=1; right = N; 		// tìm kiếm trên tất cả các phần tử</p>
+		<p class="tab4"> Bước 2: mid = (left+right)/2;		//lấy mốc so sánh</p>
+		<p class="tab5"> So sánh a[mid] với x, có 3 khả năng:</p>
+			<p class="tab6"> + a[mid] = x: Tìm thấy. Dừng lại.</p>
+			<p class="tab6"> + a[mid]>x: 					// tìm tiếp x trong dãy con a(left)...a(mid-1):</p>
+			<p class="tab6"> right = mid-1;</p>
+			<p class="tab6">+ a[mid]<x: 					//tìm tiếp x trong dãy a(mid+1)...a(right):</p>
+			<p class="tab6">left = mid+1;</p>
+		<p class="tab4">Bước 3: Nếu left<=right  			//còn phần tử chưa xét=>tìm tiếp</p>
+            <p class="tab5"> Lặp lại Bước 2</p>
+            <p class="tab5"> Ngược lại: Dừng;				//Đã xét hết phần từ</p>
+		
+		<img class="tab5" src="./picture/search/BinarySearch-penjee.gif" alt = "BinarySearch"/>
+		
+		 <p class="tab3"> Thuật toán có độ phức tạp: <b>O(log(2)n)</b>. </p>
+<pre class="brush: cpp;" >
+int BinarySearch(int a[], int N, int x){
+	int left = 0, right = N - 1;
+	int mid;
+	do{
+		mid = (left + right) / 2;
+		if (x == a[mid]) 
+			return mid;			//Thấy x tại mid
+		else
+		if (x < a[mid])
+			right = mid - 1;
+		else
+			left = mid + 1;
+	} while (left <= right);
+	return -1;					// tìm hết dãy mà không có x
+}</pre>		
+		
+	<!--					CÂY NHỊ PHÂN TÌM KIẾM					-->
+	<!--					CÂY NHỊ PHÂN TÌM KIẾM					-->
+	<!--					CÂY NHỊ PHÂN TÌM KIẾM					-->
+	<!--					CÂY NHỊ PHÂN TÌM KIẾM					-->
+	<!--					CÂY NHỊ PHÂN TÌM KIẾM					-->
+
+<h2 id="2"> 2. Cây nhị phân tìm kiếm </h2> 
+		<h3 id="2.1"> 2.1 Định nghĩa </h3>
+		<img class="tab7" src="./picture/search/BinarySearchTree-wiki.png" alt="Cây nhị phân tìm kiếm"/>
+		<p class="tab3"> Cây nhị phân tìm kiếm là cây nhị phân rỗng hoặc thoả mãn đồng thời các điều kiện sau : </p>
+		<ul class="tab4"> 
+			<li> Khoá của các đỉnh thuộc cây con trái nhỏ hơn khoá node gốc.</li>
+			<li> Khoá của node gốc nhỏ hơn khoá của các đỉnh thuộc cây con phải của của gốc.</li>
+		</ul>
+		<p class="tab3"> So sánh tìm kiếm nhị phân với tìm kiếm thông thường: </p>
+		<img class="tab4" src="./picture/search/BinaryTreeSearch-penjee.gif" alt="Cây nhị phân tìm kiếm vs tuần tự"/>
+		<!-- Insert cây biểu thức here -->
+		<h3 id="2.2"> 2.2 Một số thao tác trên cây nhị phân tìm kiếm </h3>
+		<p class="tab4"> 2.2.1 Cấu trúc cây: </p>
+<pre class="brush: cpp;">
+typedef int item; //kieu item la kieu nguyen
+struct Node
+{
+     item key; //truong key cua du lieu
+     Node *Left, *Right; //con trai va con phai
+};
+typedef Node *Tree;  //cay</pre>	
+	<p class="tab4"> 2.2.2 Thêm một phần tử vào cây: </p>
+	<img class="tab7" src="./picture/search/Insert-BinarySearchTree.gif" alt="Insert Node"/>
+<pre class="brush: cpp">
+int insertNode(Tree &T, item x) // chen 1 Node vao cay
+{
+    if (T != NULL){
+        if (T->key == x) return -1;  // Node nay da co
+        if (T->key > x) return insertNode(T->Left, x); // chen vao Node trai
+        else if (T->key < x) return insertNode(T->Right, x);   // chen vao Node phai
+    }
+    T = (Node *) malloc(sizeof(Node));
+    if (T == NULL) return 0;    // khong du bo nho
+    T->key = x;
+    T->Left = T->Right = NULL;
+    return 1;   // ok
+}</pre>
+		<p class="tab4"> 2.2.3 Nhập cây: </p>
+<pre class="brush: cpp">
+void CreateTree(Tree &T){        // nhap cay
+    int x;
+    while (1){
+        printf("Nhap vao Node: ");
+        scanf("%d", &x);
+        if (x == 0) break;  // x = 0 thi thoat
+        int check = insertNode(T, x);
+        if (check == -1) printf("Node da ton tai!");
+        else if (check == 0) printf("Khong du bo nho");
+    }
+}</pre>		
+		<p class="tab4"> 2.2.4 Duyệt cây: </p>
+<pre class="brush: cpp">
+void LNR(Tree T){
+    if(T!=NULL){
+		LNR(T->Left);
+		printf("%d   ",T->key);
+		LNR(T->Right);
+    }
+}</pre>
+		<p class="tab4"> 2.2.5 Tìm kiếm node: </p>
+<pre class="brush: cpp;">
+Node* searchKey(Tree T, item x){     // tim nut co key x
+    if (T!=NULL){
+        if (T->key == x) { Node *P = T; return P;}
+        if (T->key > x) return searchKey(T->Left, x);
+        if (T->key < x) return searchKey(T->Right, x);
+    }
+    return NULL;
+}</pre>	
+
+		<p class="tab4"> 2.2.6 Xóa node: </p>
+		<p class="tab5"> Ví dụ xóa node có giá trị 10 trong cây </p>
+		
+		<img class="tab7" src="./picture/search/Delete-BinarySearchTree.gif" alt="Delete Node"/>
+<pre class="brush: cpp;">
+int delKey(Tree &T, item x)     // xoa nut co key x
+{
+    if (T==NULL) return 0;
+    else if (T->key > x) return delKey(T->Left, x);
+    else if (T->key < x) return delKey(T->Right, x);
+    else // T->key == x
+    {
+        Node *P = T;
+        if (T->Left == NULL) T = T->Right;    // Node chi co cay con phai
+        else if (T->Right == NULL) T = T->Left;   // Node chi co cay con trai
+        else // Node co ca 2 con
+        {
+            Node *S = T, *Q = S->Left;
+            // S la cha cua Q, Q la Node phai nhat cua cay con trai cua P
+            while (Q->Right != NULL)
+            {
+                S = Q;
+                Q = Q->Right;
+            }
+            P->key = Q->key;
+            S->Right = Q->Left;
+            delete Q;
+        }
+    }
+    return 1;
+}</pre>
+		<h3 id="2.3"> 2.3 Chương trình minh họa </h3>
+
+			<h4 class="hide" onclick="show('binarysearchtree')"> Bấm vào đây để xem chương trình hoàn chỉnh </h4>
+		<div id = "binarysearchtree" style="display:none;">
+		<pre class="brush: cpp;">
+//Source: nguyenvanquan7826.com
+#include<stdlib.h>
+#include<stdio.h>
+ 
+typedef int item; //kieu item la kieu nguyen
+struct Node{
+     item key; //truong key cua du lieu
+     Node *Left, *Right; //con trai va con phai
+};
+typedef Node *Tree;  //cay
+// chen 1 Node vao cay
+int insertNode(Tree &T, item x){
+    if (T != NULL){
+        if (T->key == x) return -1;  // Node nay da co
+        if (T->key > x) return insertNode(T->Left, x); // chen vao Node trai
+        else if (T->key < x) return insertNode(T->Right, x);   // chen vao Node phai
+    }
+    T = (Node *) malloc(sizeof(Node));
+    if (T == NULL) return 0;    // khong du bo nho
+    T->key = x;
+    T->Left = T->Right = NULL;
+    return 1;   // ok
+}
+// nhap cay 
+void CreateTree(Tree &T){        
+    int x;
+    while (1)
+    {
+        printf("Nhap vao Node: ");
+        scanf("%d", &x);
+        if (x == 0) break;  // x = 0 thi thoat
+        int check = insertNode(T, x);
+        if (check == -1) printf("Node da ton tai!");
+        else if (check == 0) printf("Khong du bo nho");
+ 
+    }
+}
+ 
+// Duyet theo LNR
+void LNR(Tree T){
+     if(T!=NULL)
+     {
+      LNR(T->Left);
+      printf("%d   ",T->key);
+      LNR(T->Right);
+     }
+}
+// tim nut co key x
+Node* searchKey(Tree T, item x){
+    if (T!=NULL){
+        if (T->key == x) { Node *P = T; return P;}
+        if (T->key > x) return searchKey(T->Left, x);
+        if (T->key < x) return searchKey(T->Right, x);
+    }
+    return NULL;
+}
+ // xoa nut co key x
+int delKey(Tree &T, item x)     {
+    if (T==NULL) return 0;
+    else if (T->key > x) return delKey(T->Left, x);
+    else if (T->key < x) return delKey(T->Right, x);
+    else // T->key == x
+    {
+        Node *P = T;
+        if (T->Left == NULL) T = T->Right;    // Node chi co cay con phai
+        else if (T->Right == NULL) T = T->Left;   // Node chi co cay con trai
+        else // Node co ca 2 con
+        {
+            Node *S = T, *Q = S->Left;
+            // S la cha cua Q, Q la Node phai nhat cua cay con trai cua P
+            while (Q->Right != NULL)
+            {
+                S = Q;
+                Q = Q->Right;
+            }
+            P->key = Q->key;
+            S->Right = Q->Left;
+            delete Q;
+        }
+    }
+    return 1;
+}
+ 
+int main(){
+    Tree T;
+    T=NULL; //Tao cay rong
+ 
+    CreateTree(T); //Nhap cay
+    //duyet cay
+    printf("Duyet cay theo LNR: n");
+    LNR(T);
+    printf("n");
+ 
+    Node *P;
+    item x;
+    printf("Nhap vao key can tim: ");
+    scanf("%d", &x);
+    P = searchKey(T, x);
+    if (P != NULL) printf("Tim thay key %dn", P->key);
+    else printf("Key %d khong co trong cayn", x);
+ 
+    if (delKey(T, x)) printf("Xoa thanh congn");
+    else printf("Khong tim thay key %d can xoan", x);
+    printf("Duyet cay theo LNR: n");
+    LNR(T);
+    printf("n");
+    return 0;
+}</pre>
+			</div>	
+
+		
+		<h2 id="3"> 3. Cây nhị phân tìm kiếm cân bằng </h2> 	
+			<p class="tab3"> Bổ xung sau </p>
+		<h2 id="4"> 4. Tìm kiếm xâu mẫu </h2> 	
+			<p class="tab2"><b> Xâu (Strings)</b>: Xâu là dãy ký hiệu lấy từ bảng kí hiệu (alphabet) &Sigma;. Kí hiệu T[i .. j] là xâu con của xâu T bắt đầu từ vị trí i đến vị trí j. </p> 
+				<!-- Insert picture here -->
+			<p class="tab2"><b> Trượt (Shifts)</b>: Giả sử T<sub>1</sub> và T<sub>2</sub> là hai xâu, trong đó |T<sub>1</sub>| = m và |T<sub>2</sub>| = n. Ta nói T<sub>1</sub> xuất hiện nhờ trượt đến s trong T<sub>2</sub> nếu:</p> 
+			<p class="tab5"> T<sub>1</sub>[1 .. m]  = T<sub>2</sub>[s+1 .. s+m].
+				<!-- Insert picture here -->
+			<h3 id="4.1"> 4.1 Thuật toán trực tiếp </h3>
+				<p class="tab3"><b>Ý tưởng:</b> Trượt đến từng vị trí s = 0, 1, ... , n - m, với mỗi vị trí kiểm tra xem xâu mẫu có xuất hiện ở vị trí đó hay không.</p> 
+				<img class="tab7" src="./picture/search/naive-stdio.png" alt="Naive Algorithms"/>
+<pre class="brush: cpp;">
+//Source: Cấu trúc dữ liệu và giải thuật - Nguyễn Đức Nghĩa			
+void NaiveSM(char* T, int m, char* T, int n){		
+	int i, j;
+	/* Searching */
+	for(j = 0; i < n-m; j++){
+		for (i = 0; i< m && P[i] == T[i+j]; i++);
+		if (i >= m) OUTPUT(j);
+	}
+}</pre>	
+				<p class="tab3"> Thời gian tính trong tình huống tồi nhất = O(nm).</p>
+				<img class="tab7" src="./picture/search/naive.gif" alt="Naive Algorithms GIF"/>
+				
+				<!-- 						Boyer-Moore                -->
+				<!-- 						Boyer-Moore                -->
+				<!-- 						Boyer-Moore                -->
+				<!-- 						Boyer-Moore                -->
+				<!-- 						Boyer-Moore                -->
+			<h3 id="4.2"> 4.2 Thuật toán Boyer-Moore</h3>
+				<p class="tab3"><b>Thuật toán trực tiếp cải biên</b></p>
+<pre class="brush: cpp;">				
+for s <- 0 to n-m do
+	j <- m
+	while j > 0 and T[j+s] = P[j] do 
+		j <- j - 1
+	if j = 0 then
+		print "Là vị trí khớp"
+</pre>					
+				<p class="tab3"><b>Xét ví dụ</b></p>
+					<div class="tab5">
+					s ->
+					<table><tr><td> a </td><td> c </td><td> a </td>
+					</tr></table>
+					<br/>
+					<table><tr><td> a </td><td> a </td><td> b </td><td> a </td><td> c </td><td> a </td><td> a </td><td> b </td><td> a </td>
+					</tr></table>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<- j+s
+					</div>
+					
+					<p class="tab4">Nhận thấy rằng b không xuất hiện ở bất cứ đâu trong P vì thế có thể trượt P bỏ qua b.</p>
+				<p class="tab3"><b>Ví dụ khác</b></p>
+					<div class="tab5">
+					s ->
+					<table><tr><td> a </td><td> c </td><td> b </td><td> a </td><td> b </td>
+					</tr></table>
+					<br/>
+					<table><tr><td> a </td><td> a </td><td> b </td><td> c </td><td> b </td><td> a </td><td> a </td><td> b </td><td> a </td>
+					</tr></table>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<- j+s
+					</div>
+					<p class="tab4">Kí hiệu "c" xuất hiện ở vị trí 2 trong P, vì thế có thể trượt P sao cho hai kí hiệu "c" được đóng thẳng.</p>
+				<p class="tab3"><b> Ký tự tồi:</b> Giả sử P[j] &ne; T[j+s], khi đó ta gọi T[j+s] là <i>ký tự tồi (bad character)</i>. Sử dụng ký tự tồi có thể giúp tránh đóng hàng không đúng.</p>
+					<div class="tab5">
+					<span class="tab3">s -> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <- j</span>
+					<table class="tab3"><tr><td> a </td><td> c </td><td> b </td><td> a </td><td> b </td>
+					</tr></table>
+					<br/>
+					<table><tr><td> b </td><td> a </td><td> c </td><td> a </td><td> b </td><td style="background-color:#ff6600; color: white;"> c </td><td> b </td><td> a </td><td> a </td><td> b </td><td> a </td>
+					</tr></table>
+					<span class="tab7"><- j+s</span>
+					</div>
+				
+				<p class="tab3"><b> Hàm Last:</b> T[j+s] xuất hiện ở vị trí nào trong P? Ta xác định hàm <i>last</i> như sau:</p>
+					<p class="tab4"> Nếu c xuất hiện trong P thì last(c) = chỉ số lớn nhất (bên phải nhất) của vị trí xuất hiện của c trong P</p>
+						<p class="tab5"> ngược lại đặt last(c) = 0.</p>
+				<p class="tab3"><b>Tăng vị trí dịch chuyển: Giả sử kí tự tồi được đóng ở vị trí j của P.</b></p>
+				<p class="tab3"><b>Tình huống 1:</b></p>
+					<p class="tab4">- Kí tự tồi có mặt trong P và last(c) < j.</p>
+					<p class="tab4">- Khi đó có thể trượt đến: s <- s + (j-last(c)).</p>
+				<p class="tab3"><b>Tình huống 2:</b></p>
+					<p class="tab4">- Kí tự tồi có mặt trong P và last(c) > j.</p>
+					<p class="tab4">- Khi đó: s <- s + 1.</p>
+				<p class="tab3"><b>Tình huống 3:</b></p>
+					<p class="tab4">- Kí tự tồi không có mặt trong P và vì thế last(c) = 0.</p>
+					<p class="tab4">- Khi đó: s <- s + (j-last(c)) hay s <- s + j.</p>
+
+					
+<pre class="brush: cpp;">
+//Boyer-Moore Algorithm
+s <- 0
+while s <= n-m do
+	j <- m
+	while j > 0 and T[j+s] = P[j] do
+		j <- j - 1;
+	if j = 0
+		print "Là vị trí khớp"
+		s <- s + 1
+	else
+		k <- last (T[j+s])
+		s <- s + max(j-k, 1)</pre>
+		
+		
+		<p class="tab3">Ví dụ:
+		<div class="tab5">
+			pattern
+			<table><tr><td> a </td><td> c </td><td> a </td><td> b </td><td> a </td><td> c </td>
+			</tr></table>
+			text
+			<table><tr><td> a </td><td> a </td><td> b </td><td> a </td><td> c </td><td> b </td><td> d </td><td> c </td><td> a </td><td> a </td><td> c </td><td> a </td><td> a </td><td> c </td><td> a </td><td> b </td><td> a </td><td> c </td>
+			</tr></table>		
+		</div>
+		<p class="tab3">Tính last cho mỗi ký hiệu trong bảng kí hiệu &Sigma; = {a, b, c, d}:</p>
+			<p class="tab7">last(a) = 5, last(c) = 6, last(b) = 4, last(d) = 0.</p>
+		
+		<p class="tab3">Thời gian tính:</p>
+			<p class="tab4">- Việc tính hàm last đòi hỏi thời gian O(m + |&Sigma;|).</p>
+			<p class="tab4">- Tình huống tồi nhất không khác gì thuật toán trực tiếp, nghĩa là đòi hỏi thời gian O(mn + |&Sigma;|).</p>
+			<p class="tab4">- Ví dụ tính huống tồi nhất xảy ra khi:</p>
+				<p class="tab5">+ Pattern: ba<sup>m-1</sup></p>
+				<p class="tab5">+ Text: a<sup>n</sup></p>
+			<p class="tab4">- Thuật toán làm việc kém hiệu quả đối với bảng &Sigma; nhỏ.</p>
+		
+
+		
+					<h4 class="hide" onclick="show('boyermoore')"> Bấm vào đây để xem chương trình hoàn chỉnh </h4>
+					<div id="boyermoore" style="display:none;">				
+<pre class="brush: cpp;">
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <stdlib.h>
+int last(char P[],char c){
+	int i;
+	for (i = strlen(P)-1; i >= 0; i--)
+		if (int(P[i]) == int(c)) return i;	
+	return 0;	
+}
+
+int main(){
+	char T[50],P[10];
+	char c;
+	int i,j,s;
+	printf("Nhap xau T: "); gets(T);
+	printf("Nhap xau P: "); gets(P);
+	fflush(stdin);
+	s=0;
+	while (s <= strlen(T) - strlen(P)){
+		j=strlen(P)-1;
+		while (j>=0 && int (T[j+s])==int(P[j]) )j--;
+		if (j==-1) {
+			printf("Vi tri khop la tu %d den %d \n", s, s+strlen(P)-1);
+			s++;
+		}
+		else if (last(P,T[j+s])>j)  s=s+j-last(P,T[j+s]);
+		else s++;
+	}
+}</pre>
+					</div>	
+		
+
+
+
+	
+	</main>
+	
+	
+	
+	
+	
+</body>
+	
+
+	
+
+</html>

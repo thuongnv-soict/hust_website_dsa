@@ -1,0 +1,632 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Sắp xếp </title>
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+		}
+		h1 + img{
+			margin-left: 100px;
+			height: 300px;
+			width: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+	<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Bài toán sắp xếp </a> </li> 
+			<li> <a href="#2"> 2. Các thuật toán sắp xếp cơ bản </a> </li>
+			<ul>
+				<li> <a href="#2.1"> 2.1 Sắp xếp chèn (Insertion sort) </a> </li>
+				<li> <a href="#2.2"> 2.2 Sắp xếp lựa chọn (Selection sort) </a> </li>
+				<li> <a href="#2.3"> 2.3 Sắp xếp nổi bọt (Bubble sort) </a> </li>
+
+			</ul>
+			<li> <a href="#3"> 3. Sắp xếp trộn (Merge sort)</a> </li>
+			<ul>
+				<li> <a href="#3.1"> 3.1 Ý tưởng  </a> </li>
+				<li> <a href="#3.2"> 3.2 Minh họa </a> </li>
+			</ul>
+			<li> <a href="#4"> 4. Sắp xếp nhanh (Quick sort) </a> </li>
+			<ul>
+				<li> <a href="#4.1"> 4.1 Ý tưởng  </a> </li>
+				<li> <a href="#4.2"> 4.2 Minh họa </a> </li>
+			</ul>
+			<li> <a href="#5"> 5. Sắp xếp vun đống (Heap sort) </a> </li>
+			<ul>
+				<li> <a href="#5.1"> 5.1 Ý tưởng  </a> </li>
+				<li> <a href="#5.2"> 5.2 Minh họa </a> </li>
+			</ul>
+			<li> <a href="#5"> 6. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Sắp xếp </h1>
+		<h2 id="1"> 1. Bài toán sắp xếp </h2>
+		<p class="tab2"> <b> Định nghĩa : </b> Sắp xếp (Sorting) là quá trình tổ chức lại họ các dữ liệu theo thứ tự giảm dần hoặc tăng dần (ascending or decsending order).</p>		
+		<p class="tab2"> <b>Dữ liệu cần sắp xếp có thể là: </b></p>
+			<p class="tab3"> Số nguyên (Integers)</p>
+			<p class="tab3"> Xâu kí tự (Character Strings)</p>
+			<p class="tab3"> Đối tượng (Objects)</p>
+		<p class="tab2"> <b>Khóa sắp xếp (Sort key)</b> là bộ phận của bản ghi xác định thứ tự sắp xếp của bản ghi trong họ các bản ghi. Ta cần sắp xếp các bản ghi theo thứ tự của các khóa.</p>
+		<p class="tab2"> <b>Ứng dụng của sắp xếp: </b></p>
+			<p class="tab3"> - Quản trị cơ sở dữ liệu (Database management).</p>
+			<p class="tab3">- Khoa học và kĩ thuật (Science and engineering).</p>
+			<p class="tab3">- Các thuật toán lập lịch (Scheduling algorithms), chẳng hạn, thiết kế chương trình dịch (compiler design), truyền thông (telecommunication),...</p>
+			<p class="tab3">- Máy tìm kiếm web (Web search engine).</p>
+			<p class="tab3">- Và nhiều ứng dụng khác...</p>
+		<p class="tab2"> <b>Khoá sắp xếp (Sort key):</b></p>
+			<p class="tab3">– Là bộ phận của bản ghi xác định thứ tự sắp xếp của bản ghi trong họ các bản ghi.</p>
+			<p class="tab3">– Ta cần sắp xếp các bản ghi theo thứ tự của các khoá.</p>
+			
+		<p class="tab2"> <b>Các loại thuật toán sắp xếp:</b></p>
+			<p class="tab3">– Sắp xếp trong (internal sort)</p>
+				<p class="tab4"> Đòi hỏi họ dữ liệu được đưa toàn bộ vào bộ nhớ trong của máy tính </p>
+			<p class="tab3">– Sắp xếp ngoài (external sort)</p>
+				<p class="tab4">Họ dữ liệu không thể cùng lúc đưa toàn bộ vào bộ nhớ trong, nhưng có thể đọc vào từng bộ phận từ bộ nhớ ngoài </p>
+		<p class="tab2"> <b>Các đặc trưng của một thuật toán sắp xếp:</b></p>
+			<p class="tab3">– Tại chỗ (inplace):</p>
+				<p class="tab4">Nếu không gian nhớ phụ mà thuật toán đòi hỏi là O(1), nghĩa là bị chặn bởi hằng số không phụ thuộc vào độ dài của dãy cần sắp xếp.</p>
+			<p class="tab3">– Ổn định (stable):</p>
+				<p class="tab4">Nếu các phần tử có cùng giá trị vẫn giữ nguyên thứ tự tương đối của chúng như trước khi sắp xếp.</p>
+		
+		
+		<p class="tab2"> <b>Có hai phép toán cơ bản mà thuật toán sắp xếp thường phải sử dụng:</b></p>
+			<p class="tab3">– Đổi chỗ (Swap): Thời gian thực hiện là <i>O</i>(1)</p>
+<pre class="brush: cpp;" >
+void swap(datatype &a, datatype &b){
+	datatype temp = a;  //datatype-kiểu dữ liệu của phần tử
+	a = b;
+	b = temp;
+}</pre>
+			<p class="tab3">– So sánh: Compare(a, b) trả lại true nếu a đi trước b trong thứ tự cần sắp xếp và false nếu trái lại.</p>
+		
+		
+		<h2 id="2"> 2. Các thuật toán sắp xếp cơ bản </h2>
+		<!--                                     INSERTTION SORT                                     -->
+		<h3 id="2.1"> 2.1 Sắp xếp chèn (Insertion sort) </h3>
+		<p class="tab3"> - Tại bước k = 1, 2, ..., n, đưa phần tử thứ k trong mảng đã cho vào đúng vị trí trong dãy gồm k phần tử đầu tiên.</p>
+		<p class="tab3"> - Kết quả là sau bước k, k phần tử đầu tiên là được sắp thứ tự.</p>
+		<img class="tab5" src="./picture/sort/stdio-insertion.gif" alt = "Insertion Sort"/>
+<pre class="brush: cpp;" >
+void InsertionSort(int a[], int n){
+	for (int i = 1; i < n; i++){
+		int last = a[i];
+		int j = i;
+		while (j > 0 && a[j - 1] > x){
+			a[j] = a[j - 1];
+			j--;
+		}
+		a[j] = last;
+	}
+}</pre>		
+		<h4> Đánh giá: </h4>
+		<p class="tab4"> - Sắp xếp chèn là tại chỗ và ổn định (In place and Stable). </p>
+		<p class="tab4"><i> - Best Case:</i> 0 hoán đổi, n-1 so sánh (khi dãy đầu đã được sắp xếp). </p>
+		<p class="tab4"><i> - Worst Case:</i> n<sup>2</sup>/2 hoán đổi và so sánh (khi dãy đầu được sắp xếp ngược với thứ tự cần sắp xếp).</p>
+		<p class="tab4"><i> - Average Case:</i> n<sup>2</sup>/2 hoán đổi và so sánh.</p>
+		<p class="tab4"> - Thuật toán này có thời gian tính trong tình huống tốt nhất là tốt nhất. </p>
+		<p class="tab4"> - Là thuật toán sắp xếp tốt đối với dãy đã gần được sắp xếp. </p>
+		
+		<!--                                     SELECTION SORT                                     -->
+		<h3 id="2.2"> 2.2 Sắp xếp lựa chọn (Selection sort) </h3>
+		<h4> Các bước thực hiện: </h4>
+		<p class="tab4">Bước 1: i = 0.</p>
+		<p class="tab4">Bước 2: Tìm phần tử a[iMin] trong dãy hiện hành từ a[i] đến a[n-1].</p>
+		<p class="tab4">Bước 3: Đổi chỗ a[i] và a[iMin].</p>
+		<p class="tab4">Bước 4: Nếu i < n-1 thì lặp lại bước 2 với i++ - Ngược lại thì dừng.</p>
+		<img class="tab5" src="./picture/sort/stdio-selection.gif" alt = "Selecttion Sort"/>
+<pre class="brush: cpp;" >
+void SelectionSort(int a[], int n){
+	for (int i = 0; i < n - 1; i++){
+		int iMin = i;
+		for (int j = i + 1; j < n; j++){
+			if (a[iMin] > a[j])
+			iMin = j;
+		}
+		if (i != iMin)
+			swap(a[i], a[iMin]);
+	}
+}</pre>	
+		<h4> Đánh giá: </h4>
+		<p class="tab4"><i> - Best Case:</i> 0 đổi chỗ (n-1 như trong đoạn mã), n<sup>2</sup>/2 so sánh. </p>
+		<p class="tab4"><i> - Worst Case:</i> n-1 đổi chỗ và n<sup>2</sup>/2 so sánh.</p>
+		<p class="tab4"><i> - Average Case:</i> O(n) đổi chỗ và n<sup>2</sup>/2 so sánh.</p>
+		<p class="tab4"> - Ưu điểm nổi bật của sắp xếp chọn là số phép đổi chỗ là ít. Điều này là có ý nghĩa nếu như việc đổi chỗ là tốn kém. </p>
+
+		<!--                                     BUBBLE SORT                                     -->
+		<h3 id="2.3"> 2.3 Sắp xếp nổi bọt (Bubble sort) </h3>
+		<p class="tab3"> &nbsp;&nbsp;&nbsp;Bắt đầu từ đầu dãy, thuật toán tiến hành so sánh mỗi phần tử với phần tử đi sau nó và thực hiện đổi chỗ, nếu chúng không theo đúng thứ tự. Quá trình này sẽ được lặp lại cho đến khi gặp lần duyệt từ đầu dãy đến cuối dãy mà không phải thực hiện đổi chỗ (tức là tất cả các phần tử đã đứng đúng vị trí). Cách làm này đã đẩy phần tử lớn nhất xuống cuối dãy, trong khi đó những phần tử có giá trị nhỏ hơn được dịch chuyển về đầu dãy. </p>
+		<img class="tab5" src="./picture/sort/stdio-bubble.gif" alt = "Bubble Sort"/>
+<pre class="brush: cpp;">
+void BubbleSort(int a[], int n){
+	for (int i = 0; i < n - 1; i++)
+		for (int j = n - 1; j > i; j--)
+			if (a[j] < a[j - 1])
+				swap(a[j], a[j - 1]);
+}</pre>	
+		<h4> Đánh giá: </h4>
+		<p class="tab4"><i> - Best Case:</i> 0 đổi chỗ, n<sup>2</sup>/2 so sánh. </p>
+		<p class="tab4"><i> - Worst Case:</i> n<sup>2</sup>/2 đổi chỗ và so sánh.</p>
+		<p class="tab4"><i> - Average Case:</i> n<sup>2</sup>/4 đổi chỗ và n<sup>2</sup>/2 so sánh.</p>
+
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+										<!--                                     MERGE SORT                                     -->
+		
+		<h2 id="3"> 3. Sắp xếp trộn (Merge sort) </h2>
+		<img class="tab7" src="./picture/sort/map-merge.png" alt="Map Merge Sort"/>	
+		<h3 id="3.1"> 3.1 Ý tưởng </h3>
+		<p class="tab3"> Bài toán: Cần sắp xếp mảng A[1 .. n]</p>
+		<p class="tab3"> Chia (Divide)</p>
+			<p class="tab5"> – Chia dãy gồm nphần tử cần sắp xếp ra thành 2 dãy, mỗi dãy có n/2 phần tử</p>
+		<p class="tab3">Trị (Conquer)</p>
+			<p class="tab5"> - Sắp xếp mỗi dãy con một cách đệ qui sử dụng sắp xếp trộn</p>
+			<p class="tab5"> – Khi dãy chỉ còn một phần tử thì trả lại phần tử này</p>
+		<p class="tab3">Tổ hợp (Combine)</p>
+			<p class="tab5">Trộn (Merge) hai dãy con được sắp xếp để thu được dãy được sắp xếp gồm tất cả các phần tử của cả hai dãy con</p>
+		
+		<img class="tab7" src="./picture/sort/wiki-merge.gif" alt="Merge Sort"/>
+		<h4 id="3.1"> 3.1 Code </h4>
+		<h4 class="hide" onclick="show('merge')"> Bấm vào đây để xem chương trình hoàn chỉnh </h4>
+		<div id = "merge" style="display:none;">
+<pre class="brush: cpp;">
+// Source : HakerRank.com
+//Merge sort
+#include <stdio.h>
+#include <string.h>
+int len;
+//Sorting in non decreasing order
+
+void printArray(int arr[], int i, int j) {
+    printf("[");
+
+    for (int start = i; start < j; start++)
+        printf("%d, ", arr[start]);
+
+    printf("%d]", arr[j]);
+}
+void merge(int arr[], int i, int mid, int j) {
+    printf("Left: ");
+    printArray(arr, i, mid);
+    printf(" Right: ");
+    printArray(arr, mid + 1, j);
+    printf("\n");
+    int temp[len];
+    int l = i;
+    int r = j;
+    int m = mid + 1;
+    int k = l;
+
+    while(l <= mid && m <= r) {
+        if(arr[l] <= arr[m]) {
+            temp[k++] = arr[l++];
+        }
+        else {
+            temp[k++] = arr[m++];
+        }
+    }
+
+    while(l <= mid)
+        temp[k++] = arr[l++];
+
+    while(m <= r) {
+        temp[k++] = arr[m++];
+    }
+
+    for(int i1 = i; i1 <= j; i1++) {
+        arr[i1] = temp[i1];
+    }
+
+    printf("After Merge: ");
+    printArray(arr, i, j);
+    printf("\n");
+}
+void mergesort(int arr[], int i, int j) {
+    int mid = 0;
+
+    if(i < j) {
+        mid = (i + j) / 2;
+        mergesort(arr, i, mid);
+        mergesort(arr, mid + 1, j);
+        merge(arr, i, mid, j);
+    }
+}
+int main() {
+    int arr[] = {9, 4, 8, 3, 1, 2, 5};
+    len = sizeof(arr) / sizeof(int);
+    printf("Initial Array: ");
+    printArray(arr, 0, len - 1);
+    printf("\n");
+    mergesort(arr, 0, len - 1);
+    return 0;
+}
+</pre>
+	<div class="command tab3">
+	<pre>
+Initial Array: [9, 4, 8, 3, 1, 2, 5]
+Left: [9] Right: [4]
+After Merge: [4, 9]
+Left: [8] Right: [3]
+After Merge: [3, 8]
+Left: [4, 9] Right: [3, 8]
+After Merge: [3, 4, 8, 9]
+Left: [1] Right: [2]
+After Merge: [1, 2]
+Left: [1, 2] Right: [5]
+After Merge: [1, 2, 5]
+Left: [3, 4, 8, 9] Right: [1, 2, 5]
+After Merge: [1, 2, 3, 4, 5, 8, 9] </pre>
+		</div>
+
+</div>		
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+										<!--                                     QUICK SORT                                     -->
+		<h2 id="4"> 4 Sắp xếp nhanh (Quick sort) </h2>
+		<img class="tab7" src="./picture/sort/map-quick.png" alt="Map Quick Sort"/>	
+		<h3 id="4.1"> 4.1 Ý tưởng </h3>
+			<p class="tab3">Quick sort là thuật toán sắp xếp được phát triển dựa trên kỹ thuật chia để trị. </p>
+			<p class="tab3">Thuật toán có thể mô tả đệ qui như sau (có dạng tương tự như merge sort):</p>
+				<p class="tab4">1. Neo đệ qui (Base case): Nếu dãy chỉ còn không quá một phần tử thì nó là dãy được sắp và trả lại ngay dãy này mà không phải làm gì cả. </p>
+				<p class="tab4">2. Chia (Divide):</p>
+					<p class="tab5">2.1 Chọn một phần tử trong dãy và gọi nó là phần tử chốt p (pivot).</p>
+					<p class="tab5">2.2 Chia dãy đã cho ra thành hai dãy con: Dãy con trái (L) gồm những phần tử không lớn hơn phần tử chốt, còn dãy con phải (R) gồm các phần tử không nhỏ hơn phần tử chốt. Thao tác này được gọi là "Phân đoạn" (Partition).</p>
+				<p class="tab4">3. Trị (Conquer): Lặp lại một cách đệ qui thuật toán đối với hai dãy con L và R.</p>
+				<p class="tab4">4. Tổng hợp (Combine): Dãy được sắp xếp là L p R. </p>
+			<p class="tab3">Ngược lại với Merge Sort, trong QuickSort thao tác chia là phức tạp, nhưng thao tác tổng hợp lại đơn giản. </p>
+			<p class="tab3">Điểm mấu chốt để thực hiện QuickSort chính là thao tác chia. Phụ thuộc vào thuật toán thực hiện thao tác này mà ta có các dạng QuickSort cụ thể. </p>
+			<h4> Sơ đồ tổng quát của QuickSort có thể mô tả như sau: </h4>
+<pre class="brush: cpp;">
+//Quick-Sort(A, Left, Right)
+if(Left < Right) {
+	Pivot=Partition(A, Left, Right);
+	Quick-Sort(A, Left, Pivot –1);
+	Quick-Sort(A, Pivot +1, Right); 
+}</pre>		
+			<img class="tab7" src="./picture/sort/quick-step.jpg" alt="Quick Sort Step"/>
+			<p class="tab3">Hàm Partition(A, Left, Right) thực hiện chia A[Left..Right] thành hai đoạn A[Left..Pivot –1] và A[Pivot+1..Right] sao cho: </p>
+				<p class="tab4">- Các phần tử trong A[Left..Pivot –1] là nhỏ hơn hoặc bằng A[Pivot].  </p> 
+				<p class="tab4">- Các phần tử trong A[Pivot+1..Right] là lớn hơn hoặc bằng A[Pivot]. </p>
+			<h4>- Lệnh gọi thực hiện thuật toán Quick-Sort(A, 1, n )</h4>
+<pre class="brush: cpp;">
+//Quick-Sort(A, Left, Right)
+if(Right-Left  < n0) 
+	Insertion_sort(A, Left, Right);
+else {
+	Pivot=Partition(A, Left, Right);
+	Quick-Sort(A, Left, Pivot –1);
+	Quick-Sort(A, Pivot +1, Right); 
+}</pre>			
+			
+			<img class="tab7" src="./picture/sort/wiki-quick.gif" alt="Quick Sort"/>
+		<h4 id="4.2"> 4.2 Code </h4>
+			<h4 class="hide" onclick="show('quick')"> Bấm vào đây để xem chương trình hoàn chỉnh </h4>
+		<div id = "quick" style="display:none;">
+<pre class="brush: cpp;">
+// Source : HakerRank.com
+//Quick Sort
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+int len;
+//Sorting in non decreasing order
+void printArray(int arr[]) {
+    for (int i = 0; i < len; i++)
+        printf("%d ", arr[i]);
+
+    printf("\n");
+}
+void swap(int arr[], int k, int small) {
+    int temp;
+    temp = arr[k];
+    arr[k] = arr[small];
+    arr[small] = temp;
+}
+int partition(int arr[], int i, int j) {
+    int pivot = arr[j];
+    int small = i - 1;
+
+    for(int k = i; k < j; k++) {
+        if(arr[k] <= pivot) {
+            small++;
+            swap(arr, k, small);
+        }
+    }
+
+    swap(arr, j, small + 1);
+    printf("Pivot = %d \n", arr[small + 1]);;
+    printArray(arr);
+    return small + 1;
+}
+void quickSort(int arr[], int i, int j) {
+    if(i < j) {
+        int pos = partition(arr, i, j);
+        quickSort(arr, i, pos - 1);
+        quickSort(arr, pos + 1, j);
+    }
+}
+int main() {
+    int arr[] = {9, 4, 8, 3, 1, 2, 5};
+    len = sizeof(arr) / sizeof(int);
+    printf("Initial Array : ");
+    printArray(arr);
+    quickSort(arr, 0, len - 1);
+    return 0;
+}</pre>
+	<div class="command tab3">
+	<pre>
+Initial Array : 9 4 8 3 1 2 5 
+Pivot = 5 
+4 3 1 2 5 9 8 
+Pivot = 2 
+1 2 4 3 5 9 8 
+Pivot = 3 
+1 2 3 4 5 9 8 
+Pivot = 8 
+1 2 3 4 5 8 9 </pre>
+		</div>
+
+</div>	
+			
+		
+		
+		
+		
+		
+		<h4 id="4.3"> 4.3 Thời gian tính </h4>
+
+									
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+										<!--                                     HEAP SORT                                     -->
+		<h2 id="5"> 5. Sắp xếp vun đống (Heap sort) </h2>
+		<h3 id="5.1"> 5.1 Cấu trúc dữ liệu đống </h3>
+			<p class="tab3"><b> Định nghĩa:</b> Đống (heap) là cây nhị phân <i>gần hoàn chỉnh</i> có hai tính chất sau: </p>
+				<p class="tab4"> - Tính cấu trúc (Structural property): tất cả các mức đều là đầy, ngoại trừ mức cuối cùng, mức cuối được điền từ trái sang phải.
+				<p class="tab4"> - Tính có thứ tự hay tính chất đống (heap property): với mỗi nút x 
+				<p style="text-align:center">	Parent(x) ≥ x </p>
+				
+			<h4> 5.1.1 Biểu diễn đống bởi mảng: </h4>
+				<p class="tab4">Cây được cài đặt bởi mảng A[i] có độ dài length[A]. Số lượng phần tử là heapsize[A]</p>
+				<p class="tab4">Từ tính chất đống suy ra: <i>“Gốc chứa phần tử lớn nhất của đống!”</i></p>
+				<p class="tab4">Như vậy có thể nói: <i>"Đống là cây nhị phân được điền theo thứ tự" </i></p>
+				<img class="tab7" src="./picture/sort/array-heap.jpg" alt="Array Heap"/>
+				<p class="tab4">Đống có thể cất giữ trong mảng A.</p>
+					<p class="tab5">- Gốc của cây là A[1]</p>
+					<p class="tab5">- Con trái của A[i] là A[2*i]</p>
+					<p class="tab5">- Con phải của A[i] là A[2*i + 1]</p>
+					<p class="tab5">- Cha của A[i] là A[i/2]</p>
+					<p class="tab5">- Heapsize[A] ≤ length[A]</p>
+				<p class="tab4">Các phần tử trong mảng con A[(n/2+1) .. n]  là các lá</p>
+					<p class="tab5">- parent(i) = i/2;</p>
+					<p class="tab5">- left-child(i) = 2i;</p>
+					<p class="tab5">- right-child(i) = 2i +1</p>
+			<h4>5.1.2 Hai dạng đống:</h4>
+				<p class="tab4"><b>Đống max -Max-heaps </b>(Phần tử lớn nhất ở gốc), có tính chất  max-heap:</p>
+					<p class="tab5">– với mọi nút i, ngoại trừ gốc: A[parent(i)] ≥ A[i]</p>
+				<p class="tab4"><b>Đống min -Min-heaps </b>(Phần tử nhỏ nhất ở gốc), có tính chất min-heap:</p>
+					<p class="tab5">– với mọi nút  i, ngoại trừ gốc: A[parent(i)] ≤ A[i]</p>
+			<h4>5.1.3 Các phép toán đối với đống:</h4>
+				<p class="tab4">Bổ sung và loại bỏ nút</p>
+					<p class="tab5">- Nút mới được bổ sung vào mức đáy (từ trái sang phải)</p>
+					<p class="tab5">- Các nút được loại bỏ khỏi mức đáy (từ phải sang trái)</p>
+				
+				<p class="tab4">Khôi phục tính chất max-heap (Vun lại đống)</p>
+					<p class="tab5">- Max-Heapify</p>
+				<p class="tab4">Tạo max-heap từ một mảng không được sắp xếp</p>
+					<p class="tab5">- Build-Max-Heap</p>
+				
+				<p class="tab4">Khôi phục tính chất đống </p>
+				<p class="tab5">Giả sử có nút i với giá trị bé hơn con của nó. Giả thiết là: Cây con trái và Cây con phải của iđều là max-heaps. Để loại bỏ sự vi phạm này ta tiến hành như sau:</p>
+					<p class="tab6">- Đổi chỗ với con lớn hơn</p>
+					<p class="tab6">- Di chuyển xuống theo cây</p>
+					<p class="tab6">- Tiếp tục quá trình cho đến khi nút không còn bé hơn con</p>
+			<h4> 5.1.4 Thuật toán khôi phục tính chất đống </h4>	
+				<p class="tab4">Giả thiết: Cả hai cây con trái và phải của i đều là  max-heaps. Chú ý là A[i] có thể bé hơn các con của nó</p>	
+<pre class="brush: cpp;">
+// n= heapsize[A]
+left <- child(i) 
+right<-child(i)
+if  (l ≤ n)and (A[l] > A[i])
+	then largest < left
+else largest <-i 
+if  (r ≤ n)and (A[r] > A[largest])
+	then largest <- r
+if  largest != i
+	then Exchange(A[i] ,A[largest])
+Max-Heapify(A,largest,n)</pre>					
+			<h4> 5.1.5 Xây dựng đống (Building a Heap) </h4>
+			<p class="tab4"> &nbsp;&nbsp;&nbsp;&nbsp;Biến đổi mảng A[1 ... n] thành max-heap (n = length[A]). Vì các phần tử của mảng con A[(n/2+1) .. n]  là các lá, do đó để tạo đống ta chỉ cần áp dụng MAX-HEAPIFY đối với các phần tử từ 1 đến n/2. </p>			
+
+<pre class="brush: cpp;">
+//Build-Max-Heap(A)
+n = length[A]
+for i <- n/2 downto 1 do
+	Max-Heappify(A, i, n)</pre>		
+			<img class="tab7" src="./picture/sort/max-heapify.jpg" alt="Max-Heap"/>	
+				
+
+		
+		
+		
+		<h3 id="5.2"> 5.2 Sắp xếp vun đống </h3>
+		<p class="tab3">Sử dụng đống ta có thể phát triển thuật toán sắp xếp mảng.</p>
+		<p class="tab3">Sơ đồ của thuật toán được trình bày như sau:</p>
+			<p class="tab4">- Tạo đống max-heaptừ mảng đã cho–Đổi chỗ gốc (phần tử lớn nhất) với phần tử cuối cùng trong mảng</p>
+			<p class="tab4">- Loại bỏ nút cuối cùng bằng cách giảm kích thước của đống đi 1</p>
+			<p class="tab4">- Thực hiện Max-Heapify đối với gốc mới</p>
+			<p class="tab4">- Lặp lại quá trình cho đến khi đống chỉ còn 1 nút</p>
+<pre class="brush: cpp;">
+//Build-Max-Heap(A)
+for i <- length[A] downto 2 do 
+	exchange A[1] <-> A[i]
+Max-Heapify(A, 1, i -1)</pre>		
+		
+		
+		
+		<h3 id="5.3"> 5.3 Hàng đợi có ưu tiên -Priority Queues </h3>
+		<img class="tab7" src="./picture/sort/queue.jpg" alt="Queue"/>
+		<p class="tab3">Cho tập S thường xuyên biến động, mỗi phần tử x được gán với một giá trị gọi là khoá (hay độ ưu tiên).</p> 
+		<p class="tab3">Cần một cấu trúc dữ liệu hỗ trợ hiệu quả các thao tác chính sau:</p>
+			<p class="tab4">- Insert(S,x): Bổ sung phần tử x vào S</p>
+			<p class="tab4">- Max(S): trả lại phần tử lớn nhất</p>
+			<p class="tab4">- Extract-Max(S): loại bỏ và trả lại phần tử lớn nhất</p>
+			<p class="tab4">- Increase-Key(S,x,k): tăng khoá của x thànhk</p>
+		<p class="tab3">Cấu trúc dữ liệu đáp ứng các yêu cầu đó là hàng đợi có ưu tiên.</p>
+		<p class="tab3">Hàng đợi có ưu tiên có thể tổ chức nhờ sử dụng cấu trúc dữ liệu đống để cất giữ các khoá</p>
+		<p class="tab3">Các phép toán đối với hàng đợi có ưu tiên</p>
+		<p class="tab3">Hàng đợi có ưu tiên (max) có các phép toán cơ bản sau:	</p>
+			<p class="tab4">- Insert(S, x): bổ sung phần tử x vào tập S</p>
+			<p class="tab4">- Extract-Max(S): loại bỏ và trả lại phần tử của S với khoá lớn nhất</p>
+			<p class="tab4">- Maximum(S): trả lại phần tử của S với khoá lớn nhất</p>
+			<p class="tab4">- Increase-Key(S, x, k): tăng giá trị của khoá của phần tử x lên thành k (Giả sử k ≥ khoá hiện tại của x)</p>
+		<p class="tab3">Hàng đợi có ưu tiên (min) tương tự</p>
+		
+		<!-- Các phép toán trên hàng đợi ở đây -->
+		
+		
+		
+		<img class="tab7" src="./picture/sort/wiki-heap.gif" alt="Heap Sort"/>
+		<h3 id="5.4"> 5.4 Code </h3>
+		<h4 class="hide" onclick="show('heap')"> Bấm vào đây để xem chương trình hoàn chỉnh </h4>
+		<div id = "heap" style="display:none;">
+<pre class="brush: cpp;">	
+// Source : HakerRank.com
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct MaxHeap {
+    int len;
+    int *arr;
+} heap;
+
+void printArray(int arr[], int len) {
+    for (int i = 0; i < len; i++)
+        printf("%d ", arr[i]);
+
+    printf("\n");
+}
+void swap(int *i, int *j) {
+    int temp = *i;
+    *i = *j;
+    *j = temp;
+}
+void heapify(heap *maxheap, int N) {
+    int largest = N;
+    int left = 2 * N + 1;
+    int right = 2 * N + 2;
+
+    if(left < maxheap -> len && maxheap -> arr[left] > maxheap -> arr[largest]) {
+        largest = left;
+    }
+
+    if(right < maxheap -> len && maxheap -> arr[right] > maxheap -> arr[largest]) {
+        largest = right;
+    }
+
+    if(largest != N) {
+        swap(&maxheap -> arr[largest], &maxheap -> arr[N]);
+        heapify(maxheap, largest);
+    }
+}
+heap* createHeap(int arr[], int N) {
+    heap* maxheap = (heap*)malloc(sizeof(heap));
+    maxheap -> len = N;
+    maxheap -> arr = arr;
+    int i = (maxheap -> len - 2) / 2;
+
+    while(i >= 0) {
+        heapify(maxheap, i);
+        i--;
+    }
+
+    return maxheap;
+}
+
+void heapSort(int arr[], int N) {
+    //creating a heap
+    heap *maxheap = createHeap(arr, N);
+
+    //Repeating the below steps till the size of the heap is 1.
+    while(maxheap -> len > 1) {
+        //Replacing largest element with the last item of the heap
+        swap(&maxheap -> arr[0], &maxheap -> arr[maxheap -> len - 1]);
+        maxheap -> len--;//R  educing the heap size by 1
+        heapify(maxheap, 0);
+    }
+}
+int main() {
+    int arr[] = {9, 4, 8, 3, 1, 2, 5};
+    int len = sizeof(arr) / sizeof(int);
+    printf("Initial Array  : ");
+    printArray(arr, len);
+    heapSort(arr, len);
+    printf("After Sorting  : ");
+    printArray(arr, len);
+    return 0;
+}
+</pre>
+		<div class="command tab3">
+		<pre>
+Initial Array  : 9 4 8 3 1 2 5 
+After Sorting  : 1 2 3 4 5 8 9 </pre>
+		</div>
+
+</div>	
+
+
+
+
+
+
+
+	
+	</main>
+	
+</body>
+</html>

@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Đồ thị </title>
+
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+		}
+		h1 + img{
+			margin-left: 100px;
+			height: 300px;
+			width: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+	<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Khái niệm </a> </li> 
+				<li> <a href="#1.1"> 1.1 Các loại đồ thị </a> </li>
+				<li> <a href="#1.1"> 1.2 Đường đi, chu trình và tính liên thông của đồ thị </a> </li>
+			<li> <a href="#2"> 2. Biểu diễn đồ thị </a> </li>
+			<ul>
+				<li> <a href="#2.1"> 2.1 Biểu diễn đồ thị bởi ma trận </a> </li>
+				<li> <a href="#2.2"> 2.2 Biểu diễn đồ thị bởi danh sách kề </a> </li>
+			</ul>
+			<li> <a href="#3"> 3. Duyệt đồ thị </a> </li>
+			<li> <a href="#5"> 5. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Đồ thị </h1>
+		<img src="./picture/list/reallinkedlist.jpg" alt="Real Linked List"/>
+		<h2 id="1">1. Khái niệm </h2>
+			<p class="tab3"> Đồ thị là cặp (V, E), trong đó: </p>
+				<p class="tab3"> <i>- V là tập đỉnh </i></p>
+				<p class="tab3"> <i>- E là họ các cặp đỉnh gọi là các cạnh </i></p>
+			<p class="tab3"> Ví dụ: Các đỉnh là các sân bay:
+			<p class="tab4"> - Các cạnh thể hiện đường bay nối hai sân bay </p>
+			<p class="tab4"> - Các số trên cạnh có thể là chi phí (thời gian, khoảng cách) </p>
+				
+				
+			<p class="tab3">Phụ thuộc vào kiểu của cạnh nối và số lượng các cạnh nối giữa hai đỉnh mà ta phân biệt các loại đồ thị khác nhau </p>
+			<h3 id="1.1"> Các loại đồ thị </h3>
+			
+				
+			<br/><span class="tab7 desc"> Element </span><span class="desc"> Link/Pointer </span><br/><br/>
+			<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+			<h3 id="1.1" class="hide"  onclick="show('single')"> Danh sách liên kết đơn </h3>
+			<div id="single" style="display: none;width: 600px;">
+				<p class="tab3"> &nbsp; &nbsp; Danh sách bao gồm các ô (còn gọi là các nút), mỗi ô chứa một phần tử của danh sách và con trỏ đến ô tiếp theo theo của danh sách </p>
+				<p class="tab3"> &nbsp; &nbsp;Nếu danh sách là a<sub>1</sub>, a<sub>2</sub>,..., a<sub>n</sub> thì ô lưu trữ a<sub>i</sub> có con trỏ (móc nối) đến ô lưu trữ a<sub>i+1</sub> với i = 1,2,...,n-1. Ô lưu trữ a<sub>n</sub> có con trỏ rỗng, mà ta sẽ kí hiệu là <b>nil</b>. Như mỗi ô có cấu trúc: </p>
+				<p class="tab3"> &nbsp; &nbsp; Có một ô đặc biệt gọi là ô header để trỏ ra ô chứa phần tử đầu tiên trong danh sách (a<sub>1</sub>), ô header không lưu trữ phần tử nào cả. Trong trường hợp danh sách rỗng, con trỏ của header là <b>nil</b>, và không có ô nào khác.</p>
+				<p class="tab3"> &nbsp; &nbsp; Các ô có thể nằm ở vị trí bất kì trong bộ nhớ </p>
+				<p class="tab3"> Danh sách móc nối đơn được tổ chức như hình vẽ sau: </p>
+				<img class="tab5" src="./picture/list/list1.png" alt="list1"/>
+				<p class="tab6"> Mối nối chỉ ra địa chỉ bộ nhớ của nút tiếp theo trong danh sách </p>
+				<img class="tab3" src="./picture/list/list2.png" alt="list2"/>	
+			</div>
+			
+			<h3 id="1.1" class="hide" onclick="show('double')"> Danh sách liên kết đôi </h3>
+			<div id="double" style="display: none;max-width: 600px;">
+				<p class="tab3"> &nbsp;&nbsp; Trong nhiêu ứng dụng ta muôn duyệt danh sách theo cà hai chiều một cách hiệu qùa. Hoặc cho một phần tử, ta cần xác định cà phần từ đi trước lẫn phần tử đi sau nó trong danh sách một cách nhanh chóng.</p>
+				<p class="tab3"> &nbsp;&nbsp; Trong tình huống như vậy ta có thể gán cho mỗi ô trong danh sách con trỏ đến cả phần tử đi trước lẫn phần tử đi sau nó trong danh sách. </p>
+				<img class="tab5" src="./picture/list/doubleDescription2.png" alt="doubleDesc"/>
+				<p class="tab3"> Cách tổ chức này được gọi là <b><i>danh sách nối đôi </i></b></p>
+				<p class="tab3"> Cách tổ chức <b><i>danh sách nối đôi </i></b> được minh họa trong hình vẽ sau:</p>
+				<img class="tab5" src="./picture/list/doubleDescription.png" alt="doubleDesc"/>
+				<p class="tab3"> Có hai nút đặc biệt: <b>head(đầu)</b> và <b>tail(đuôi)</b></p>
+				<p class="tab4"> - head có con trỏ trái prev là null </p>
+				<p class="tab4"> - tail có con trỏ trái next là null </p>
+				<p class="tab3"> Các phép toán cơ bản được xét tương tự như danh sách nối đơn </p>
+			</div>
+		<h2 id="2">2. Mô tả </h2>
+		<h3 id="2.1"> 2.1 Danh sách liên kết đơn </h3> 
+		<img class="tab5" src="./picture/list/singleList.png" alt="Single List"/>
+		<pre class="brush: cpp;" >
+typedef DataType ElementType;
+struct PointerType{
+	ElementType Inf;
+	struct PointerType *Next;
+};
+typedef struct PointerType LIST;</pre>
+		<h3 id="2.2"> 2.2 Danh sách liên kết đôi </h3> 
+		<img class="tab5" src="./picture/list/doubleList.png" alt="Double List"/>
+		<pre class="brush: cpp;" >
+struct dllist{
+	int number;
+	struct dllist *next;
+	struct dllist *prev;
+}
+struct dllist *head, *tail;</pre>
+		<h3 id="2.3"> Danh sách liên kết vòng </h3> 
+			<p class = "tab4"> Tương tự danh sách liên kết đơn nhưng con trỏ nút cuối trỏ vào nút đầu tiên </p>
+	
+	<!-- 3. Các phép toán cơ bản -->	
+		<h2 id="3"> 3. Các phép toán cơ bản </h2>
+		<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+		<h3 id="3.1" class="hide" onclick="show('insert')">3.1 Insert(x,p)</h3>
+		<div id="insert">
+			<img class="tab5" src="./picture/list/insert.png" alt="insert"/>	
+			<p class="tab3">  Giả sử chèn một phần tử có nội dung dữ liệu là x (có kiểu là DataType) vào danh sách. Vị trí cần chèn được xác định là sau nút được trỏ bởi con trỏ <b>Fred</b>. Thao tác được tiến hành theo các bước:</p>
+			<p class="tab4"> -(1) Xin cấp phát một nút mới cho con trỏ <b>TempNode</b> để lưu x; </p>
+			<p class="tab4"> - Nối nút này vào danh sách tại vị trí cần chèn </p>
+			<p class="tab5"> + <b>TempNode->Next</b> bằng <b>Pred->Next</b>.</p>
+			<p class="tab5"> + Ghi nhận lại <b>Pred->Next</b> bằng <b>TempNode</b>.</p>
+		</div>
+		<h3 id="3.2" class="hide" onclick="show('delete')">3.2 Delete(x)</h3>
+		<div id="delete">
+			<img class="tab5" src="./picture/list/delete.png" alt="delete"/>	
+			<p class="tab3"> Hàm này thực hiện loại bỏ </p>
+			<p class="tab4"> -(1) Xin cấp phát một nút mới cho con trỏ <b>TempNode</b> để lưu x; </p>
+			<p class="tab4"> - Nối nút này vào danh sách tại vị trí cần chèn </p>
+			<p class="tab5"> + <b>TempNode->Next</b> bằng <b>Pred->Next</b>.</p>
+			<p class="tab5"> + Ghi nhận lại <b>Pred->Next</b> bằng <b>TempNode</b>.</p>
+		</div>
+		
+		<h2 id="4"> 4. Chương trình minh họa </h2>
+		<h3 id="4.1"> 4.1 Cài đặt danh sách </h3>
+		<pre class="brush: cpp;">
+typedef int item; //kieu cac phan tu dinh nghia la item
+typedef struct Node //Xay dung mot Node trong danh sach
+{
+    item Data; //Du lieu co kieu item
+    Node *next; //Truong next la con tro, tro den 1 Node tiep theo
+};
+typedef Node *List; //List la mot danh sach cac Node</pre>
+
+		<h3 id="4.2" > 4.2 Khởi tạo danh sách rỗng </h3>
+		<pre class="brush: cpp;">
+void Init (List &L) // &L lay dia chi cua danh sach ngay khi truyen vao ham
+{
+    L=NULL; //Cho L tro den NULL
+}</pre>
+				
+		<h3 id="4.3"> 4.3 Kiểm tra danh sách rỗng hay không </h3>
+		<pre class="brush: cpp;">
+int Isempty (List L)
+{
+    return (L==NULL);
+}</pre>
+		
+		<h3 id="4.4"> 4.4 Tính độ dài danh sách </h3>
+		<pre class="brush: cpp;">
+int len (List L) 
+{
+    Node *P=L; //tao 1 Node P de duyet danh sach L
+    int i=0; //bien dem
+    while (P!=NULL) //trong khi P chua tro den NULL (cuoi danh sach thi lam)
+    {
+        i++; //tang bien dem
+        P=P->next; //cho P tro den Node tiep theo
+    }
+    return i; //tra lai so Node cua l
+}</pre>
+		<h3 id="4.5"> 4.5 Tạo một node trong danh sách </h3>
+		<pre class="brush: cpp;">
+Node *Make_Node (Node *P, item x) //tao 1 Node P chua thong tin la x 
+{
+    P = (Node *) malloc (sizeof (Node)); //Cap phat vung nho cho P
+    P->next = NULL; //Cho truong Next tro den NULL
+    P->Data = x; //Ghi du lieu vao Data
+    return P; 
+}</pre>
+		
+		
+		<h3 id="4.6"> 4.6 Chèn Node P vào vị trí đầu tiên </h3>
+		<pre class="brush: cpp;">
+void Insert_first (List &L, item x)  //Chen x vao vi tri dau tien trong danh sach
+{
+    Node *P; 
+    P = Make_Node(P,x); //tao 1 Node P
+    P->next = L; //Cho P tro den L
+    L = P; //L tro ve P
+}</pre>
+		
+		<h3 id="4.7"> 4.7 Chèn Node P vào vị trí k trong danh sách </h3>
+		<pre class="brush: cpp;">
+void Insert_k (List &L, item x, int k) //chen x vao vi tri k trong danh sach
+{
+    Node *P, *Q = L; 
+    int i=1;
+    if (k<1 || k> len(L)+1) printf("Vi tri chen khong hop le !"); //kiem tra dieu kien
+    else
+    {
+        P = Make_Node(P,x); //tao 1 Node P
+        if (k == 1) Insert_first(L,x); //chen vao vi tri dau tien
+        else //chen vao k != 1
+        {
+            while (Q != NULL && i != k-1) //duyet den vi tri k-1
+            {
+                i++;
+                Q = Q->next;
+            }
+            P->next = Q->next; 
+            Q->next = P;
+        }
+    }
+}</pre>
+		<h3 id="4.8"> 4.8 Tìm phần tử co giá trị x trong danh sách </h3>
+				<pre class="brush: cpp;">
+int Search (List L, item x) //tim x trong danh sach
+{
+    Node *P=L; 
+    int i=1;
+    while (P != NULL && P->Data != x) //duyet danh sach den khi tim thay hoac ket thuc danh sach
+    {
+        P = P->next;
+        i++;
+    }
+    if (P != NULL) return i; //tra ve vi tri tim thay
+    else return 0; //khong tim thay
+}</pre>
+		
+		<h3 id="4.9"> 4.9 Xóa phần tử ở vị trí đầu tiên </h3>
+				<pre class="brush: cpp;">
+void Del_frist (List &L, item &x) //Xoa phan tu dau tien
+{
+    x = L->Data; //lay gia tri ra neu can dung
+    L = L->next; //Cho L tro den Node thu 2 trong danh sach
+}</pre>
+
+		<h3 id="4.10"> 4.10 Xóa phần tư ở vị trí k </h3>
+		<pre class="brush: cpp;">
+void Del_k (List &L, item &x, int k) //Xoa Node k trong danh sach
+{
+    Node *P=L;
+    int i=1;
+    if (k<1 || k>len(L)) printf("Vi tri xoa khong hop le !"); //kiem tra dieu kien
+    else
+    {
+        if (k==1) Del_frist(L,x); //xoa vi tri dau tien
+        else //xoa vi tri k != 1
+        {
+            while (P != NULL && i != k-1) //duyet den vi tri k-1
+            {
+                P=P->next;
+                i++;
+            }
+            P->next = P->next->next; //cho P tro sang Node ke tiep vi tri k
+        }
+    }
+}</pre>
+	
+		<h3 id="4.11"> 4.11 Xóa phần tử có giá trị x </h3>
+		<pre class="brush: cpp;">
+void Del_x (List &L, item x) //xoa phan tu x trong danh sach
+{
+    while (Search(L,x)) Del_k (L,x,Search(L,x)); //trong khi van tim thay x thi van xoa
+}</pre>
+		
+		<h4 class="hide" onclick="show('full')"> Bấm vào đây để xem chương trình hoàn chỉnh </h4>
+		<div id = "full" style="display:none;">
+		<pre class="brush: cpp;">
+
+}</pre>
+	</div>	
+
+	<h2 id = "5"> 5. Bài tập tự làm </h2>
+	</main>
+</body>
+
+
+</html>

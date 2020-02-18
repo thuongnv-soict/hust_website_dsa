@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Hàng đợi </title>
+
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+		<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Khái niệm </a> </li> 
+			<li> <a href="#2"> 2. Mô tả </a> </li>
+			<ul>
+				<li> <a href="#2.1"> 2.1 Hàng đợi dùng mảng </a> </li>
+				<li> <a href="#2.2"> 2.2 Hàng đợi dùng danh sách liên kết </a> </li>
+			</ul>
+			<li> <a href="#3"> 3. Chương trình minh họa </a> </li>
+			<ul>
+				<li> <a href="#3.1"> 3.1 Sử dùng mảng </a> </li>
+				<li> <a href="#3.2"> 3.2 Sử dụng danh sách liên kết </a> </li>
+			</ul>
+			<li> <a href="#4"> 4. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Hàng đợi </h1>
+		<img class="tab5" src="./picture/queue/realqueue.jpg" alt="Real Queue"/>
+		<h2 id="1">1. Khái niệm </h2>
+			<p class="tab3"> &nbsp; &nbsp; Hàng đợi là <i>danh sách có thứ tự</i> trong đó phép toán chèn luôn được thực hi chỉ ở một phía gọi là phía sau hay cuối (back or rear), còn phép toán xóa chỉ thực hiện ở phía còn lại là phía trước đầu</p>
+			<p class="tab3"> &nbsp; <b> - Nguyên tắc:</b> Vào trước - Ra trước (First-in, First-out, viết tắc là FIFO)</p>
+			<p class="tab3"> &nbsp; <b> - Các phép toán cơ bản với hàng đợi: </b></p>
+			<p class="tab3"> &nbsp;&nbsp; + enqueue(Q,x): Chèn phần tử x vào phía sau (back) hàng đợi Q. Nếu việc chèn dẫn đến tràn hàng đợi thì cần thông báo về điều này. </p>
+			<p class="tab3"> &nbsp;&nbsp; + dequeue(Q,x): Xóa phần tử ở phía trước (front) hàng đợi Q và trả lại x là thông tin chứa trong phần tử này. Nếu hàng đợi rỗng thì cần thông báo về điều này. </p>
+			<img class="tab5" src="./picture/queue/queue.png" alt="Stack"/>
+			<p class="tab3"> &nbsp; <b> - Các phép tooán bổ trợ: </b></p>
+			<p class="tab3"> &nbsp;&nbsp; + Q=init(): Khởi tạo Q là hàng đợi rỗng. </p>
+			<p class="tab3"> &nbsp;&nbsp; + isEmpty(Q): Trả lại "true" khi hàng đợi Q rỗng. </p>
+			<p class="tab3"> &nbsp;&nbsp; + isFull(Q): Trả lại "true" khi hàng đợi Q tràn, cho biết ta đã sử dụng vượt quá kích thước tối đa dành cho hàng đợi. </p>
+			<p class="tab3"> &nbsp;&nbsp; + front(Q): Trả lại phần tử ở phía trước (front) của hàng đợi Q hoặc gặp lỗi nếu hàng đợi rỗng. </p>
+			<p class="tab3"> &nbsp;&nbsp; + print(Q): Đưa ra danh sách tất cả các phần tử của hàng đợi Q theo thứ tự từ phía trước đến phía sau. </p>	
+			<p class="tab3"> &nbsp;&nbsp; + size(Q): trả lại số lượng phần tử trong hàng đợi Q. </p>
+			<p class="tab3"> &nbsp; <b> - Ta xét hai cách tổ chức hàng đợi: </b></p>
+			<p class="tab3"> &nbsp;&nbsp; + Sử dụng mảng </p>
+			<p class="tab3"> &nbsp;&nbsp; + Sử dụng danh sách liên kết </p>
+
+		<h2 id="2">2. Mô tả </h2>
+		
+		<h3 id="2.1"> 2.1 Hàng đợi dùng mảng </h3> 
+		<img class="tab5" src=".\picture\Stack\array-stack.gif" alt="Stack Array"/>
+		<p class="tab3"> &nbsp; Sử dụng mảng Q kích thước N theo thứ tự vòng tròn. Có hai biến đề lưu trữ vị trí đầu và cuối (<i>front</i> and <i>rear</i>)</p>
+		<p class="tab3"> &nbsp; - f chỉ số của phần tử ở đầu hàng đợi. </p>
+		<p class="tab3"> &nbsp; - r chỉ số ở ngay sau phần tử cối cùng của hàng đợi. </p>
+		<p class="tab3"> &nbsp; Vị trí r được giữ là rỗng. </p>
+		
+		
+<pre class="brush: cpp;">
+typedef int item; //kieu du lieu
+struct Queue
+{
+    int Front, Rear; //front: phan tu dau hang, rear: phan tu cuoi hang
+    item Data[Max]; //Mang cac phan tu
+    int count; //dem so phan tu cua Queue
+};</pre>
+	<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+		<h4 id="2.1.1" onclick="show('2.1.1hide')" class="hide"> 2.1.1 Khởi tạo hàng đợi rỗng </h4> 
+<div id="2.1.1hide" style="display: none;">
+<pre class="brush: cpp;">
+void Init (Queue &Q) //khoi tao Queue rong
+{
+    Q.Front = 0; //phan tu dau
+    Q.Rear = -1; // phan tu cuoi o -1 (khong co phan tu trong Q)
+    Q.count = 0; //so phan tu bang 0
+}</pre>
+</div>
+		<h4 id="2.1.2" onclick="show('2.1.2hide')" class="hide"> 2.1.2 Kiểm tra ngăn xếp rỗng</h4> 
+<div id="2.1.2hide" style="display: none;">
+<pre class="brush: cpp;">
+int Isempty (Queue Q) //kiem tra Queue rong
+{
+    if (Q.count == 0) //so phan tu = 0 => rong
+        return 1;
+    return 0;
+}</pre>
+</div>
+	<h4 id="2.1.3" onclick="show('2.1.3hide')" class="hide"> 2.1.3 Kiểm tra ngăn xếp đầy </h4> 
+<div id = "2.1.3hide" style="display: none;">
+<pre class="brush: cpp;">
+int Isfull (Queue Q) //kiem tra Queue day
+{
+    if (Q.count == Max) //so phan tu = Max => day
+        return 1;
+    return 0;
+}</pre>
+</div>
+		<h4 id="2.1.4" onclick="show('2.1.4hide')" class="hide"> 2.1.4 Thêm phần tử vào cuối hàng đợi </h4> 
+<div id="2.1.4hide" style="display: none;">
+<pre class="brush: cpp;">
+void Push(Queue &Q, item x) //them phan tu vao cuoi Queue
+{
+    if (Isfull(Q)) printf("Hang doi day !");
+    else
+    { 
+        Q.Data[++Q.Rear] = x; //tang Rear len va gan phan tu vao
+        Q.count++; //tang so phan tu len
+    }
+}</pre>
+</div>
+	<h4 id="2.1.5" onclick="show('2.1.5hide')" class="hide"> 2.1.5 Lấy phần tử vào đầu ngăn xếp </h4> 
+<div id="2.1.5hide" style="display: none;">
+<pre class="brush: cpp;">
+int Pop(Queue &Q) //Loai bo phan tu khoi dau hang doi
+{
+    if (Isempty(Q)) 
+		printf("Hang doi rong !");
+    else
+    {
+        item x = Q.Data[Q.Front];
+		for (int i = Q.Front; i < Q.Rear; i++){//di chuyen cac phan tu ve dau hang
+			Q.Data[i] = Q.Data[i+1];
+		} 
+            
+        Q.Rear--; // giam vi tri phan tu cuoi xuong
+        Q.count--;//giam so phan tu xuong
+        return x; //tra ve phan tu lay ra
+    }
+}
+</pre>
+</div>
+	<h4 id="2.1.6" class="hide" onclick="show('2.1.6hide')" > 2.1.6 Xem thông tin phần tử đầu hàng đợi </h4>
+	<div id="2.1.6hide" style="display: none;">
+<pre class="brush: cpp;">
+item Qfront (Queue Q) //xem thong tin phan tu dau hang
+{
+    if (Isempty(Q)) printf("Hang doi rong !");
+    else return Q.Data[Q.Front];
+}</pre>
+</div>
+	<h4 id="2.1.7" onclick="show('fullArray')"class="hide">  2.1.7 Xem chương trình hoàn chỉnh </h4>
+	<div id="fullArray") style="display: none;">
+<pre class="brush: cpp;">
+</pre>
+</div>
+<!--               DANH SACH LIEN KET                         -->
+		<h3 id="2.2"> 2.2 Hàng đợi dùng danh sách liên kết </h3> 
+		<p class="tab3"> &nbsp; Tương tự như trong ngăn xếp </p>
+		<p class="tab3"> Cấu trúc dữ liệu </p>
+<pre class="brush: cpp;">		
+typedef int item; //kieu du lieu
+struct Node
+{
+    item Data;
+    Node * Next;
+};
+struct Queue
+{
+    Node * Front, *Rear; //Node dau va Node cuoi
+    int count; //dem so phan tu
+};</pre>
+		<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+		<h4 id="2.2.1" onclick="show('2.2.1hide')" class="hide"> 2.2.1 Khởi tạo </h4>
+<div id="2.2.hide" style="display: none;">
+<pre class="brush: cpp;">
+void Init(Queue &Q)
+{
+    Q.Front = Q.Rear = NULL;
+    Q.count = 0;
+}</pre>
+</div>
+		<h4 id="2.2.2"onclick="show('2.2.2hide')" class="hide"> 2.2.2 Kiểm tra rỗng </h4>
+<div id="2.2.hide" style="display: none;">
+<pre class="brush: cpp;">
+int Isempty (Queue Q) //kiem tra Queue rong
+{
+    if (Q.count == 0) //so phan tu = 0 => rong
+        return 1;
+    return 0;
+}</pre>
+</div>
+		<h4 id="2.2.3" onclick="show('2.2.3hide')" class="hide"> 2.2.3 Tạo một node mới</h4>
+<div id="2.2.hide" style="display: none;">
+		<pre class="brush: cpp;">
+Node *MakeNode(item x) //tao 1 Node
+{
+    Node *P = (Node*) malloc(sizeof(Node));
+    P->Next = NULL;
+    P->Data = x;
+    return P;
+}</pre>
+</div>
+		<h4 id="2.2.4" onclick="show('2.2.4hide')" class="hide"> 2.2.4 Thêm phần tử vào cuối </h4>
+		<div id="2.2.hide" style="display: none;">
+		<p class="tab4"> Để thêm phần tử, ta kiểm tra xem hàng có rỗng không, nếu hàng rỗng thì cho cả Front và Rear cùng trỏ về Node P mới tạo chứa phàn tử x cần thêm. Nếu không rỗng ta trỏ Rear->Next về P và Rear trỏ về P. Tăng count lên 1 </p>
+<pre class="brush: cpp;">
+void Push(Queue &Q, item x) //them phan tu vao cuoi Queue
+{
+    Node *P = MakeNode(x); //Neu Q rong
+    if (Isempty(Q))
+    {
+        Q.Front = Q.Rear = P; //dau va cuoi deu tro den P
+    }
+    else //Khong rong
+    { 
+        Q.Rear->Next = P;
+        Q.Rear = P;
+    }
+    Q.count ++ ; //tang so phan tu len
+}</pre>
+</div>
+		<h4 id="2.2.5" onclick="show('2.2.5hide')" class="hide"> 2.2.5 Lấy ra phần tử đầu </h4>
+		<div id="2.2.hide" style="display: none;">
+		<p class="tab4"> Ta kiểm tra Queue có rỗng không, Nếu không rỗng kiểm tra xem có 1 hay nhiêu hơn 1 phần tử, nếu có 1 phần tử thì ta khởi tạo lại Queue, nếu có nhiều hơn ta cho Front trỏ đến tiếp theo. Giảm count xuống 1.</p>
+<pre class="brush: cpp;">
+float StackPop(Stack *s){
+	float item;
+	StackNode *node;
+	if (StackEmpty(s)){  	//(l)
+		EmptyStack(); //can't pop
+		return NULL;
+	}
+	node = s->top; 			//(2)
+	item = node->item;  	//(3)
+	s->top = node->next;	//(4)
+	free(node): 			//(5)
+	return item; 			//(6)
+}
+</pre>
+</div>
+		
+	<h3 id="3"> 3. Chương trình minh họa </h3>
+	<p class="tab3" style="color: #ff6600"> Click vào danh mục để hiện nội dung.</p>
+	<h4 id="3.1" onclick="show('queue1')"> 3.1 Sử dụng mảng </h4>
+<div id="queue1" style="display: none;">
+<pre class="brush: cpp;">		
+#include <stdlib.h>
+#include <stdio.h>
+ 
+#define Max 5 //so phan tu toi da cua Queue
+typedef int item; //kieu du lieu
+ 
+struct Queue
+{
+    int Front, Rear; //front: phan tu dau hang, rear: phan tu cuoi hang
+    item Data[Max]; //Mang cac phan tu
+    int count; //dem so phan tu cua Queue
+};
+ 
+void Init (Queue &Q); //khoi tao Queue rong
+int Isempty(Queue Q); //kiem tra Queue rong
+int Isfull(Queue Q); //kiem tra Queue day
+void Push(Queue &Q, item x); //them phan tu vao cuoi hang doi
+int Pop(Queue &Q); //Loai bo phan tu khoi dau hang doi
+int Qfront (Queue Q); //xem thong tin phan tu dau hang doi 
+void Input (Queue &Q); //Nhap 
+void Output(Queue Q); //Xuat 
+ 
+void Init (Queue &Q) //khoi tao Queue rong
+{
+    Q.Front = 0; //phan tu dau
+    Q.Rear = -1; // phan tu cuoi o -1 (khong co phan tu trong Q)
+    Q.count = 0; //so phan tu bang 0
+}
+ 
+int Isempty (Queue Q) //kiem tra Queue rong
+{
+    if (Q.count == 0) //so phan tu = 0 => rong
+        return 1;
+    return 0;
+}
+ 
+int Isfull (Queue Q) //kiem tra Queue day
+{
+    if (Q.count == Max) //so phan tu = Max => day
+        return 1;
+    return 0;
+}
+ 
+void Push(Queue &Q, item x) //them phan tu vao cuoi Queue
+{
+    if (Isfull(Q)) printf("Hang doi day !");
+    else
+    { 
+        Q.Data[++Q.Rear] = x; //tang Rear len va gan phan tu vao
+        Q.count++; //tang so phan tu len
+    }
+}
+ 
+int Pop(Queue &Q) //Loai bo phan tu khoi dau hang doi
+{
+    if (Isempty(Q)) printf("Hang doi rong !");
+    else
+    {
+        item x = Q.Data[Q.Front];
+        for (int i = Q.Front; i < Q.Rear; i++) //di chuyen cac phan tu ve dau hang
+            Q.Data[i] = Q.Data[i+1];
+        Q.Rear--; // giam vi tri phan tu cuoi xuong
+        Q.count--;//giam so phan tu xuong
+        return x; //tra ve phan tu lay ra
+    }
+}
+ 
+item Qfront (Queue Q) //xem thong tin phan tu dau hang
+{
+    if (Isempty(Q)) printf("Hang doi rong !");
+    else return Q.Data[Q.Front];
+}
+ 
+
+void Input (Queue &Q) //nhap hang doi
+{
+    int n;
+    item x;
+    do
+    {
+        printf("Nhap so phan tu cua Queue (%d) :",Max);
+        scanf("%d",&n);
+    } while (n>Max || n<1);
+    for (int i = 0; i < n; i++)
+    {
+        printf("Nhap phan tu thu %d : ", i+1);
+        scanf("%d",&x);
+        Push(Q,x);
+    }
+}
+ 
+void Output(Queue Q)
+{
+    if (Isempty(Q)) printf("Hang doi rong !");
+    else
+    {
+        for (int i = Q.Front; i <= Q.Rear; i++)
+            printf("%d   ",Q.Data[i]);
+        printf("\n");
+    }
+}
+ 
+int main()
+{
+    Queue Q;
+    Init(Q);
+    Input(Q);
+    Output(Q);
+ 
+    int lua_chon;
+    printf("Moi ban chon phep toan voi DS LKD:");
+    printf("\n1: Kiem tra Queue rong");
+    printf("\n2: Kiem tra Queue day");
+    printf("\n3: Them phan tu vao Queue");
+    printf("\n4: Xoa phan tu trong Queue");
+    printf("\n5: Xuat Queue");
+    printf("\n6: Thoat");
+    do
+    {
+        printf("\nBan chon: ");
+        scanf("%d",&lua_chon);
+        switch (lua_chon)
+        {
+            case 1:
+            {
+                if (Isempty(Q)) printf("Queue rong !");
+                else printf ("Queue khong rong !");
+                break;
+            }
+            case 2:
+            {
+                if (Isfull(Q)) printf("Queue day !");
+                else printf ("Queue chua day !");
+                break;
+            }
+            case 3:
+            {
+                item x;
+                printf ("Nhap phan tu can chen vao Queue: ");
+                scanf("%d",&x);
+                Push(Q,x);
+                break;
+            }
+            case 4:
+            {
+                Pop(Q);
+                break;
+            }
+            case 5: 
+            {
+                Output(Q);
+                break;
+            }
+            case 6: break;
+        }
+    }while (lua_chon !=6);
+    return 0;
+}</pre>
+</div>
+		<h4 id="3.2" onclick="show('queue2')"> 3.2 Sử dụng danh sách liên kết </h4>
+<div id="queue2" style="display: none;">
+<pre class="brush: cpp;">
+#include <stdlib.h>
+#include <stdio.h>
+ 
+typedef int item; //kieu du lieu
+struct Node
+{
+    item Data;
+    Node * Next;
+};
+struct Queue
+{
+    Node * Front, *Rear; //Node dau va Node cuoi
+    int count; //dem so phan tu
+};
+ 
+void Init (Queue &Q); //khoi tao Queue rong
+int Isempty(Queue Q); //kiem tra Queue rong
+void Push(Queue &Q, item x); //them phan tu vao cuoi hang doi
+int Pop(Queue &Q); //Loai bo phan tu khoi dau hang doi
+int Qfront (Queue Q); //xem thong tin phan tu dau hang doi 
+Node *MakeNode(item x); //tao 1 Node
+void Input (Queue &Q); //Nhap 
+void Output(Queue Q); //Xuat 
+ 
+void Init(Queue &Q)
+{
+    Q.Front = Q.Rear = NULL;
+    Q.count = 0;
+}
+int Isempty (Queue Q) //kiem tra Queue rong
+{
+    if (Q.count == 0) //so phan tu = 0 => rong
+        return 1;
+    return 0;
+}
+ 
+Node *MakeNode(item x) //tao 1 Node
+{
+    Node *P = (Node*) malloc(sizeof(Node));
+    P->Next = NULL;
+    P->Data = x;
+    return P;
+}
+ 
+void Push(Queue &Q, item x) //them phan tu vao cuoi Queue
+{
+    Node *P = MakeNode(x); //Neu Q rong
+    if (Isempty(Q))
+    {
+        Q.Front = Q.Rear = P; //dau va cuoi deu tro den P
+    }
+    else //Khong rong
+    { 
+        Q.Rear->Next = P;
+        Q.Rear = P;
+    }
+    Q.count ++ ; //tang so phan tu len
+}
+ 
+int Pop(Queue &Q) //Loai bo phan tu khoi dau hang doi
+{
+    if (Isempty(Q)) 
+    {
+        printf("Hang doi rong !");
+        return 0;
+    }
+    else
+    {
+        item x = Q.Front->Data;
+        if (Q.count == 1) //neu co 1 phan tu
+            Init(Q);
+        else
+            Q.Front = Q.Front->Next;
+        Q.count --;
+        return x; //tra ve phan tu lay ra
+    }
+}
+ 
+void Input (Queue &Q) //nhap hang doi
+{
+    int i=0; 
+    item x;
+    do
+    {
+        i++;
+        printf ("Nhap phan tu thu %d : ",i);
+        scanf("%d",&x);
+        if (x != 0) Push(Q,x);
+    } while(x != 0); //nhap 0 de ket thuc
+}
+ 
+void Output(Queue Q)
+{
+    Node *P = Q.Front;
+    while (P != NULL)
+    {
+        printf("%d   ",P->Data);
+        P = P->Next;
+    }
+    printf("\n");
+}
+ 
+int main()
+{
+    Queue Q;
+    Init(Q);
+    Input(Q);
+    Output(Q);
+ 
+    int lua_chon;
+    printf("Moi ban chon phep toan voi DS LKD:");
+    printf("\n1: Kiem tra Queue rong");
+    printf("\n2: Them phan tu vao Queue");
+    printf("\n3: Xoa phan tu trong Queue");
+    printf("\n4: Xuat Queue");
+    printf("\n5: Thoat");
+    do
+    {
+        printf("\nBan chon: ");
+        scanf("%d",&lua_chon);
+        switch (lua_chon)
+        {
+            case 1:
+            {
+                if (Isempty(Q)) printf("Queue rong !");
+                else printf ("Queue khong rong !");
+                break;
+            }
+            case 2:
+            {
+                item x;
+                printf ("Nhap phan tu can chen vao Queue: ");
+                scanf("%d",&x);
+                Push(Q,x);
+                break;
+            }
+            case 3:
+            {
+                Pop(Q);
+                break;
+            }
+            case 4: 
+            {
+                Output(Q);
+                break;
+            }
+            case 5: break;
+        }
+    }while (lua_chon !=5);
+    return 0;
+}</pre>
+</div>		
+
+
+
+
+
+	<h2 id = "4"> 4. Bài tập tự làm </h2>
+	</main>
+</body>
+
+
+</html>

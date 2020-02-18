@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Cây </title>
+
+	<style type="text/css">
+		img{
+			max-width: 500px;
+			height: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+	<script src="path.js"> </script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Định nghĩa </a> </li> 
+			<ul>
+				<li> <a href="#1.1"> 1.1 Định nghĩa cây </a> </li>
+				<li> <a href="#1.2"> 1.2 Cây trong thực tế </a> </li>			
+			</ul>
+			<li> <a href="#2"> 2. Các thuật ngữ </a> </li> 
+			<li> <a href="#3"> 3. Cây có thứ tự</a> </li>
+			<li> <a href="#4"> 4. Cây có nhãn </a> </li>
+			<li> <a href="#5"> 5. ADT cây</a> </li>
+			<li> <a href="#6"> 6. Cây nhị phân</a> </li>
+			<ul>
+				<li> <a href="#6.1"> 6.1 Định nghĩa & tính chất </a> </li>
+				<li> <a href="#6.2"> 6.2 Biểu diễn cây nhị phân </a> </li>
+				<li> <a href="#6.3"> 6.2 Duyệt cây nhị phân </a> </li>
+			</ul>
+			<li> <a href="#7"> 7. Chương trình minh họa </a> </li>
+			<li> <a href="#8"> 8. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Cây </h1>
+		<img src="./picture/tree/realtree.png" alt="Real Tree"/>
+		<h2 id="1">1 Định nghĩa </h2>
+			<h3 id="1.1"> 1.1 Định nghĩa cây </h3>
+			<p class="tab3"> &nbsp; &nbsp; Cây bao gồm các nút, có một nút đặc biệt gọi là <i>gốc (root)</i> và các cạnh nối các nút. Cây được định nghĩa đệ quy như sau: </p>
+			<p class="tab3"> &nbsp; <b> Định nghĩa cây:</b></p>
+			<p class="tab3"> &nbsp; <i> - Basic step: </i> Một nút r là cây và r được gọi là gốc của cây này. </p>
+			<p class="tab3"> &nbsp; <i> - Recursive step: </i> Giả sử T<sub>1</sub>,T<sub>2</sub>,...,T<sub>k</sub> là các cây với gốc là r<sub>1</sub>, r<sub>2</sub>, ...,r<sub>k</sub>. Ta có thể xây dựng cây mới bằng cách đặt r làm cha (parent) của các nút r<sub>1</sub>, r<sub>2</sub>, ...,r<sub>k</sub>. Trong cây này r là gốc và T<sub>1</sub>,T<sub>2</sub>,...,T<sub>k</sub> là các cây con của gốc r. Các nút r<sub>1</sub>, r<sub>2</sub>, ...,r<sub>k</sub> còn được gọi là con (children) của nút r. </p>
+			<p class="tab3"> &nbsp; <b> Chú ý: </b> Nhiều khi để phù hợp ta cần định nghĩa cây rỗng (null tree) là cây không có nút nào cả</p>
+			<img class="tab5" src="./picture/tree/treeabtract.png" alt="Stack"/>
+			
+			<h3 id="1.2"> 1.2 Cây trong thực tế </h3>
+
+
+		<h2 id="2">2. Các thuật ngữ </h2>
+			<ul>
+				<li> Nút - node</li>
+				<li> Gốc - root</li>
+				<li> Lá - leaf</li>
+				<li> Con - child</li>
+				<li> Cha - Parent</li>
+				<li> Tổ tiên - ancestors</li>
+				<li> Hậu duệ - descendants</li>
+				<li> Anh em - sibling</li>
+				<li> Nút trong - internal node</li>
+				<li> Chiều cao - higth</li>
+				<li> Chiều sâu - depth</li>
+			</ul>
+		<!-- Giải thích các thuật ngữ ở đây (Có kèm theo hình ảnh)-->
+		<h3> Các thuật ngữ với cây có gốc </h3>
+			<ul>
+				<li> Đường đi</li>
+				<li> Độ cao(height) & độ sâu(depth)</li>
+				<li> Bậc (degree) </li>
+			</ul>
+		<h2 id="3"> 3. Cây có thứ tự </h2> 
+		<img class="tab5" style="width: 500px;" src=".\picture\tree\order.gif" alt="Order"/>
+		
+		<h2 id="4"> 4. Cây có nhãn</h2> 
+		<p class="tab3"> Thông thường người ta gán cho mỗi nút của cây một nhãn(label) hoặc một giá trị, cũng tương tự như chúng ta đã gán mỗi nút của danh sách với một phần tử. Nghĩa là, nhãn của nút không phải là tên gọi của nút mà là giá trị được cất giữ trong nó. Trong một số ứng dụng ta có thể thay đổi nhãn của nút mà tên của nó vẫn giữ nguyên.</p>
+		<!-- Insert cây biểu thức here -->
+		<h2 id="5"> 5. ADT cây</h2> 
+
+		<img class="tab3" src=".\picture\tree\adttree.png"/>
+<pre class="brush: cpp;">
+typedef struct Node{
+	int value;
+	struct Node* leftMostChild;
+	struct Node* rightSibling;
+};
+Node *root;</pre>	
+
+	<h3> Tạo một node </h3>
+<pre class="brush: cpp">
+Node* MakeNode(int x){
+	Node* P=(Node*) malloc(sizeof(Node));
+	P->value=x;
+	P->leftMostChild=NULL;
+	P->rightSibling=NULL;
+	return P;
+}</pre>
+
+		<h3> Tìm kiếm node </h3>
+<pre class="brush: cpp">
+Node* find ( Node* r , int v){
+	if (r == NULL) return NULL;
+	if (r−>id == v) return r;
+	Node* p = r−>leftMostChild;
+	while(p!=NULL){
+		Node* pv = find(p ,v);
+		if(pv != NULL) return pv;
+		p = p−>rightSibling;
+	}
+	return NULL;
+}</pre>
+
+	<h3> Đếm số node </h3>
+<pre class="brush: cpp">
+int count(Node* r){
+	if (r == NULL) return 0;
+	int c = 1;
+	Node *P = r->leftMostChild;
+	while(p!=NULL){
+		int cp = count(p);
+		c += cp;
+		p = p->rightSibling;
+	}
+	return c;
+}</pre>
+
+	<h3> Chiều cao của cây </h3>
+<pre class="brush: cpp">
+int height(Node *p){
+	if (p==NULL) return 0;
+	int h=0;
+	Node* pi = p->leftMostChild;
+	while(pi != NULL){
+		int hi = height(pi);
+		h = h > hi ? h : hi;
+		pi = pi->rightSibling;
+	}
+	return h+1;
+}</pre>
+
+	<h3> Tìm cha của một node </h3>
+<pre class="brush: cpp">
+Node* parent(Node* r, Node* p){
+	if (r == NULL) return NULL;
+	Node* q=r->leftMostChild;
+	while(q != NULL){
+		if (q == p) return r;
+		Node* h = parent(q,p);
+		if (h != NULL) return h;
+		q = q->rightSibling;
+	}
+	return NULL;
+}</pre>
+
+	<h3> Thêm một node mới vào cuối danh sách các node con của một node </h3>
+	<p class="tab3"> Thêm node có value=v vào cuối danh sách các node con của p </p>
+<pre class="brush: cpp">
+Node* parent(Node* p, int v){
+	Node* pv = MakeNode(v);
+	Node* pi = p->leftMostChild;
+	if (pi == NULL){
+		p->leftMostChild = pv;
+	}
+	else{
+		while(pi->rightSibling != NULL){
+			pi = pi->rightSibling;
+		}
+		pi->rightSibling = pv;
+	}
+}</pre>
+
+		
+	<!--       Show instance   
+	<p class="tab3" style="color: #ff6600"> &nbsp; <b> Click vào danh mục để hiện code. </b></p>
+		<h4 id="2.1.1" onclick="show('2.1.1hide')" style="cursor: pointer"> 2.1.1 Khởi tạo hàng đợi rỗng </h4> 
+<div id="2.1.1hide" style="display: none;">
+
+-->
+
+		<h2 id="6">6. Cây nhị phân </h2>
+		<h3 id="6.1">6.1 Định nghĩa & tính chất </h3>
+			<h4> Định nghĩa </h4>
+			<p class="tab4"> &nbsp; &nbsp; Cây nhị phân là cây mà mỗi nút có nhiều nhất hai con.</p>
+			<p class="tab4"> &nbsp; - Vì mỗi nút chỉ có không quá hai con nên ta sẽ gọi chúng là <b>con trái</b> và <b>con phải</b> (<i>left and right child</i>)</p>
+			<p class="tab4"> &nbsp; - Như vậy mỗi nút của cây nhị phân hoặc là <b>không có con</b>, hoặc <b>chỉ có con phải</b> ,hoặc chỉ có con trái, hoặc có cả con phải và con trái</p>
+			<img class="tab5" style="width: 500px;" src=".\picture\tree\binarytree1.png" alt="Binary Tree"/>
+			<h4> 1.2 Tính chất </h4>
+			
+			
+			<!-- Insert tính chất here -->
+
+		<h3 id="6.2">6.2 Biểu diễn cây nhị phân </h3>
+			<h4> 6.1 Sử dụng mảng </h4>
+			<h4> 6.2 Sử dụng con trỏ </h4>
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\BinaryTreeUsingPointer.png" alt="BinaryTreeUsingPointer"/>
+<pre class="brush: cpp;">
+typedef struct Node{
+	int value;
+	struct Node* left;
+	struct Node* right;
+};
+Node *root;</pre>
+		
+		<h3 id="6.3"> 6.3 Duyệt cây nhị phân </h3>
+			<p class="tab4"> 3.1 Duyệt theo Node - Left - Right (NLR): </p>
+			<p class="tab5"> Duyệt node gốc, duyệt node trái, duyệt node phải. </p> 
+			<img class="tab6" style="width: 300px;" src=".\picture\tree\NLR.gif" alt="Preorder"/>
+<pre class="brush: cpp;">
+void NLR(Node* root){
+	if (root != NULL){
+		printf("%d \t", root->value);
+		NLR(root->left);
+		NLR(root->right);
+	}
+}</pre>
+			<p class="tab4"> 3.2 Duyệt theo Left - Node - Right (LNR) :</p>  
+			<p class="tab5"> Xuất ra giá trị tăng dần trong cây nhị phân tìm kiếm. </p> 
+			<img class="tab6" style="width: 300px;" src=".\picture\tree\LNR.gif" alt="Inorder"/>
+<pre class="brush: cpp;">
+void LNR(Node* root){
+	if (root != NULL){
+		LNR(root->left);
+		printf("%d \t", root->value);
+		LNR(root->right);
+	}
+}</pre>
+			
+			<p class="tab4"> 3.3 Duyệt theo Left - Right - Node (LRN): </p>  
+			<p class="tab5"> Xuất ra giá trị giảm dần trong cây nhị phân tìm kiếm. </p>
+			<img class="tab6" style="width: 300px;" src=".\picture\tree\LRN.gif" alt="Postorder"/>
+<pre class="brush: cpp;">
+void LRN(Node* root){
+	if (root != NULL){
+		LRN(root->left);
+		LRN(root->right);
+		printf("%d \t", root->value);
+	}
+}</pre>
+			
+<!--			 Theo độ cao và độ sâu
+			<h3 id="3.4"> 3.4 Theo độ cao </h3> 
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\height.gif" alt="Height"/>
+			<h3 id="3.5"> 3.5 Theo độ sâu </h3> 
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\depth.gif" alt="Depth"/>
+-->				
+		
+		<!-- Giải thích các thuật ngữ ở đây (Có kèm theo hình ảnh)-->
+		
+<!-- 4   -->
+
+
+
+
+
+
+
+
+
+
+
+	<h2 id = "6"> 6. Bài tập tự làm </h2>
+	</main>
+</body>
+
+
+</html>

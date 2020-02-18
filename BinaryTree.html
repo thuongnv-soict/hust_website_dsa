@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushCpp.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<link type="text/css" rel="stylesheet" href="content.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<title> Cây nhị phân </title>
+
+	<style type="text/css">
+		img{
+			max-width: 400px;
+			height: auto;
+		}
+		#insert, #delete, #locate, #retrieve{
+			display: none;
+		}
+		.desc{
+			border: 1px solid black;
+			padding: 5px 20px;
+		}
+	</style>
+	<script>
+		function change(b,s){
+			if (document.getElementById(b).value == "show"){
+				document.getElementById(b).value = "hide";
+				document.getElementById(s).style.display = 'block';
+			}
+			else{
+				document.getElementById(b).value = "show";
+				document.getElementById(s).style.display = 'none';
+			}
+		}
+		function show(id){
+			document.getElementById(id).style.display = 'block';
+		}
+	</script>
+</head>
+<body>
+	<nav>
+		<ul>
+			<li> <a href="#1"> 1. Định nghĩa & tính chất </a> </li> 
+				<ul>
+					<li> <a href="#1.1"> 1.1 Định nghĩa </a> </li>
+					<li> <a href="#1.2"> 1.2 Tính chất </a> </li>
+				</ul>
+			<li> <a href="#2"> 2. Biểu diễn cây nhị phân </a> </li> 
+			<li> <a href="#3"> 3. Duyệt cây nhị phân</a> </li>
+			<li> <a href="#4"> 4. Cây nhị phân tìm kiếm </a> </li>
+			<ul>
+				<li> <a href="#4.1"> 4.1 Định nghĩa </a> </li>
+				<li> <a href="#4.2"> 4.2 Một số thao tác </a> </li>
+			</ul>
+			<li> <a href="#6"> 5. Chương trình minh họa </a> </li>
+			<li> <a href="#7"> 6. Bài tập tự làm</a> </li>
+		</ul>
+		<!--
+		<a href="#gif">GIF</a>
+		<a href="#vd">Ví dụ</a>
+		<a href="#bt">Bài tập</a>-->
+	</nav>
+	<main>	
+		<h1> Cây nhị phân </h1>
+		<img src="./picture/tree/realbinarytree.png" alt="Real Binary Tree"/>
+		<h2 id="1">1 Định nghĩa </h2>
+			<h3 id="1.1"> 1.1 Định nghĩa </h3>
+			<p class="tab3"> &nbsp; &nbsp; Cây nhị phân là cây mà mỗi nút có nhiều nhất hai con.</p>
+			<p class="tab3"> &nbsp; - Vì mỗi nút chỉ có không quá hai con nên ta sẽ gọi chúng là <b>con trái</b> và <b>con phải</b> (<i>left and right child</i>)</p>
+			<p class="tab3"> &nbsp; - Như vậy mỗi nút của cây nhị phân hoặc là <b>không có con</b>, hoặc <b>chỉ có con phải</b> ,hoặc chỉ có con trái, hoặc có cả con phải và con trái</p>
+			<img class="tab5" style="width: 500px;" src=".\picture\tree\binarytree1.png" alt="Binary Tree"/>
+			<h3 id="1.2"> 1.2 Tính chất </h3>
+			
+			
+			<!-- Insert tính chất here -->
+			
+
+		<h2 id="2">2 Biểu diễn cây nhị phân </h2>
+			<h3 id="2.1"> 2.1 Sử dụng mảng </h3>
+			<h3 id="2.2"> 2.2 Sử dụng con trỏ </h3>
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\BinaryTreeUsingPointer.png" alt="BinaryTreeUsingPointer"/>
+<pre class="brush: cpp;">
+typedef struct Node{
+	int value;
+	struct Node* left;
+	struct Node* right;
+};
+Node *root;</pre>
+		<h2 id="3"> 3. Duyệt cây nhị phân </h2>
+			<p class="tab3" id="3.1"> 3.1 Duyệt theo Node - Left - Right (NLR): </p>
+			<p class="tab4"> Duyệt node gốc, duyệt node trái, duyệt node phải. </p> 
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\NLR.gif" alt="Preorder"/>
+<pre class="brush: cpp;">
+void NLR(Node* root){
+	if (root != NULL){
+		printf("%d \t", root->value);
+		NLR(root->left);
+		NLR(root->right);
+	}
+}</pre>
+			<p class="tab3" id="3.2"> 3.2 Duyệt theo Left - Node - Right (LNR) :</p>  
+			<p class="tab4"> Xuất ra giá trị tăng dần trong cây nhị phân tìm kiếm. </p> 
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\LNR.gif" alt="Inorder"/>
+<pre class="brush: cpp;">
+void LNR(Node* root){
+	if (root != NULL){
+		LNR(root->left);
+		printf("%d \t", root->value);
+		LNR(root->right);
+	}
+}</pre>
+			
+			<p class="tab3" id="3.3"> 3.3 Duyệt theo Left - Right - Node (LRN): </p>  
+			<p class="tab4"> Xuất ra giá trị giảm dần trong cây nhị phân tìm kiếm. </p>
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\LRN.gif" alt="Postorder"/>
+<pre class="brush: cpp;">
+void LRN(Node* root){
+	if (root != NULL){
+		LRN(root->left);
+		LRN(root->right);
+		printf("%d \t", root->value);
+	}
+}</pre>
+			
+<!--			 Theo độ cao và độ sâu
+			<h3 id="3.4"> 3.4 Theo độ cao </h3> 
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\height.gif" alt="Height"/>
+			<h3 id="3.5"> 3.5 Theo độ sâu </h3> 
+			<img class="tab5" style="width: 300px;" src=".\picture\tree\depth.gif" alt="Depth"/>
+-->				
+		
+		<!-- Giải thích các thuật ngữ ở đây (Có kèm theo hình ảnh)-->
+		
+<!-- 4   -->
+		
+		<h2 id="4"> 4. Cây nhị phân tìm kiếm </h2> 
+		<h3 id="4.1"> 4.1 Định nghĩa </h3>
+		<p class="tab3"> Cây nhị phân tìm kiếm là cây nhị phân rỗng hoặc thoả mãn đồng thời các điều kiện sau : </p>
+		<ul class="tab4"> 
+			<li> Khoá của các đỉnh thuộc cây con trái nhỏ hơn khoá node gốc.</li>
+			<li> Khoá của node gốc nhỏ hơn khoá của các đỉnh thuộc cây con phải của của gốc.</li>
+		</ul>
+		<p class="tab3"> So sánh tìm kiếm nhị phân với tìm kiếm thông thường: </p>
+		<img class="tab4" src="./picture/tree/binary-search.gif" alt="Tìm kiếm nhị phân"/>
+		<!-- Insert cây biểu thức here -->
+		<h3 id="4.2"> 4.2 Một số thao tác trên cây nhị phân tìm kiếm </h3>
+		<p class="tab4"> 4.2.1 Tạo node: </p>
+<pre class="brush: cpp;">
+Node* MakeNode(int x)
+{
+    NODE* p = new NODE();
+    p->data = x;
+    p->pLeft = p->pRight = NULL;
+    return p;
+}</pre>	
+		<p class="tab4"> 4.2.2 Tìm kiếm node: </p>
+		<p class="tab5"> Sử dụng đệ quy: </p>
+<pre class="brush: cpp;">
+Node* Find_Node(Node* root, int x){
+	if (root != NULL){
+		if (root->value == x){
+			return root;
+		}
+		if (root->value > x){
+			Find_Node(root->left, x);
+		}
+		else{
+			Find_Node(root->right, x);
+		}
+	}
+}</pre>	
+	<p class="tab5"> Không sử dụng đệ quy: </p>
+<pre class="brush: cpp;">
+Node* Find_Node(Node* root, int x){
+    if (root == NULL){
+        return NULL;
+    }
+    Node* p = root;
+    Node* f = p;
+    while (p != NULL){
+        f = p;
+        if (p->value > x){
+            p = p->left;
+        }
+        else{
+            p = p->right;
+        }
+    }        
+    return f;
+}</pre>
+	<p class="tab4"> 4.2.3 Chèn node: </p>
+<pre class="brush: cpp">
+void Insert_Node(Node* &root, int x){
+    Node* n = MakeNode(x);
+    if (root == NULL){
+        root = n;
+        return;
+    }
+    else{
+        Node* f = Find_Node(root, x);
+        if (f != NULL){
+            if (f->value > x){
+                f->left = n;
+            }
+			else{
+                f->right = n;
+            }
+        }
+    }
+}</pre>
+
+		<p class="tab4"> 4.2.4 Tạo cây nhị phân tìm kiếm từ một mảng: </p>
+<pre class="brush: cpp">
+void CreateTree(Node* &root, int a[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        Insert_Node(root, a[i]);
+    }
+}</pre>
+
+	
+	<h2 id="5"> 5. Chương trình minh họa</h2> 
+		
+	<!--       Show instance   
+	<p class="tab3" style="color: #ff6600"> &nbsp; <b> Click vào danh mục để hiện code. </b></p>
+		<h4 id="2.1.1" onclick="show('2.1.1hide')" style="cursor: pointer"> 2.1.1 Khởi tạo hàng đợi rỗng </h4> 
+<div id="2.1.1hide" style="display: none;">
+
+-->
+
+	<h2 id = "6"> 6. Bài tập tự làm </h2>
+	</main>
+</body>
+
+
+</html>
